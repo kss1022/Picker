@@ -8,6 +8,9 @@
 @testable import Gallery
 import Permission
 import PermissionTestSupport
+import AlbumRepository
+import AlbumRepositoryTestSupport
+import AlbumEntity
 import XCTest
 
 
@@ -20,6 +23,11 @@ final class GalleryInteractorTests: XCTestCase {
     private var permission: PermissionMock!{
         dependecny.permission as! PermissionMock
     }
+    
+    private var albumRepository: AlbumRepositoryMock!{
+        dependecny.albumRepository as! AlbumRepositoryMock
+    }
+    
     
     override func setUp() {
         super.setUp()
@@ -55,5 +63,22 @@ final class GalleryInteractorTests: XCTestCase {
         
         XCTAssertEqual(true, presentable.permissionDeniedIsHidden)
         XCTAssertEqual(false, presentable.permissionLimitedIsHidden)
+    }
+    
+    
+    
+    func testShowAlbum() async{
+        await interactor.checkPermssion()
+        permission.photoStatusMock = .authorized
+        
+        let album = Album()
+        albumRepository.albumsSubjects.send([album])
+        
+        await interactor.showPermissionState()
+                
+        XCTAssertEqual([album], albumRepository.albums.value)
+        XCTAssertEqual(1, albumRepository.fetchCallCount)
+        XCTAssertEqual(1, presentable.showAlbumCallCount)
+        XCTAssertEqual(AlbumViewModel(album), presentable.album)
     }
 }

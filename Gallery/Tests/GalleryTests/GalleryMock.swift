@@ -8,17 +8,19 @@
 @testable import Gallery
 import Permission
 import PermissionTestSupport
-
-import Foundation
+import AlbumRepository
+import AlbumRepositoryTestSupport
 
 
 
 final class GalleryDependencyMock: GalleryInteractorDependency{
     
     var permission: Permission
+    var albumRepository: AlbumRepository
     
     init() {
         self.permission = PermissionMock()
+        self.albumRepository = AlbumRepositoryMock()
     }
     
     
@@ -26,8 +28,6 @@ final class GalleryDependencyMock: GalleryInteractorDependency{
 
 
 final class GalleryPresentableMock: GalleryPresentable{
-
-    
     var listener: GalleryPresentableListener?
     
     
@@ -45,4 +45,18 @@ final class GalleryPresentableMock: GalleryPresentable{
         showPermissionLimitedCallCount += 1
         permissionLimitedIsHidden = false
     }
+    
+    var openSettingCallCount = 0
+    func openSetting() {
+        openSettingCallCount += 1
+    }
+    
+    
+    var showAlbumCallCount = 0
+    var album: AlbumViewModel?
+    func showAlbum(_ viewModel: AlbumViewModel) {
+        showAlbumCallCount += 1
+        album = viewModel
+    }
+    
 }

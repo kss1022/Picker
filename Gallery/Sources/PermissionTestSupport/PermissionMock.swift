@@ -9,7 +9,7 @@ import Foundation
 import Permission
 
 
-public class PermissionMock: Permission{
+public final class PermissionMock: Permission{
     
     public var photoStatusMock: PhotoStatus
 

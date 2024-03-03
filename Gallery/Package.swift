@@ -15,11 +15,24 @@ let package = Package(
             targets: ["Permission"]
         ),
         .library(
+            name: "AlbumRepository",
+            targets: ["AlbumRepository"]
+        ),
+        .library(
+            name: "AlbumEntity",
+            targets: ["AlbumEntity"]
+        ),
+        .library(
             name: "PermissionTestSupport",
             targets: ["PermissionTestSupport"]
+        ),
+        .library(
+            name: "AlbumRepositoryTestSupport",
+            targets: ["AlbumRepositoryTestSupport"]
         )
     ],
-    dependencies: [        
+    dependencies: [     
+        .package(path: "../Platform"),
         .package(url: "https://github.com/DevYeom/ModernRIBs", branch: "main"),
     ],
     targets: [
@@ -27,20 +40,35 @@ let package = Package(
             name: "Gallery",
             dependencies: [
                 "ModernRIBs",
-                "Permission"
+                "Permission",
+                "AlbumRepository"
             ]
         ),
         .target(
             name: "Permission"
         ),
         .target(
+            name: "AlbumRepository",
+            dependencies: [
+                .product(name: "CombineUtils", package: "Platform"),
+                "AlbumEntity"
+            ]
+        ),
+        .target(
+            name: "AlbumEntity"
+        ),
+        .target(
             name: "PermissionTestSupport"
+        ),
+        .target(
+            name: "AlbumRepositoryTestSupport"
         ),
         .testTarget(
             name: "GalleryTests",
             dependencies: [
                 "Gallery",
-                "PermissionTestSupport"
+                "PermissionTestSupport",
+                "AlbumRepositoryTestSupport"
             ]
         ),
         .testTarget(

@@ -13,6 +13,7 @@ protocol GalleryPresentableListener: AnyObject {
 }
 
 final class GalleryViewController: UIViewController, GalleryPresentable, GalleryViewControllable {
+
     weak var listener: GalleryPresentableListener?
     
     private lazy var permissionDeniedButton: UIButton = {
@@ -68,6 +69,12 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     func openSetting() {
         URLSchemeManager.shared.openSetting()
     }
+    
+    func showAlbum(_ viewModel: AlbumViewModel) {
+        //shwoTitle
+        //showPhotos
+    }
+    
     
     @objc
     private func permissionButtonTap(){

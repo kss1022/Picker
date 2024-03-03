@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		871B814F2B945F130026F22D /* Gallery in Frameworks */ = {isa = PBXBuildFile; productRef = 871B814E2B945F130026F22D /* Gallery */; };
+		8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = 8775115D2B947F9F00EE2652 /* CombineExt */; };
 		87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 87A6185B2B945DD200A80DB4 /* ModernRIBs */; };
 		87C786A52B91CB8F00B36D52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A42B91CB8F00B36D52 /* AppDelegate.swift */; };
 		87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8775115B2B947F6900EE2652 /* Platform */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Platform; path = ../Platform; sourceTree = "<group>"; };
 		87A618592B9459AB00A80DB4 /* Gallery */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gallery; sourceTree = "<group>"; };
 		87C786A12B91CB8F00B36D52 /* Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Picker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C786A42B91CB8F00B36D52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +37,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */,
+				8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */,
 				871B814F2B945F130026F22D /* Gallery in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,6 +55,7 @@
 		87C786982B91CB8F00B36D52 = {
 			isa = PBXGroup;
 			children = (
+				8775115B2B947F6900EE2652 /* Platform */,
 				87A618592B9459AB00A80DB4 /* Gallery */,
 				87C786A32B91CB8F00B36D52 /* Picker */,
 				87C786A22B91CB8F00B36D52 /* Products */,
@@ -100,6 +104,7 @@
 			packageProductDependencies = (
 				87A6185B2B945DD200A80DB4 /* ModernRIBs */,
 				871B814E2B945F130026F22D /* Gallery */,
+				8775115D2B947F9F00EE2652 /* CombineExt */,
 			);
 			productName = Picker;
 			productReference = 87C786A12B91CB8F00B36D52 /* Picker.app */;
@@ -131,6 +136,7 @@
 			mainGroup = 87C786982B91CB8F00B36D52;
 			packageReferences = (
 				87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */,
+				8775115C2B947F9F00EE2652 /* XCRemoteSwiftPackageReference "CombineExt" */,
 			);
 			productRefGroup = 87C786A22B91CB8F00B36D52 /* Products */;
 			projectDirPath = "";
@@ -396,6 +402,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8775115C2B947F9F00EE2652 /* XCRemoteSwiftPackageReference "CombineExt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineExt";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.1;
+			};
+		};
 		87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DevYeom/ModernRIBs";
@@ -410,6 +424,11 @@
 		871B814E2B945F130026F22D /* Gallery */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gallery;
+		};
+		8775115D2B947F9F00EE2652 /* CombineExt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8775115C2B947F9F00EE2652 /* XCRemoteSwiftPackageReference "CombineExt" */;
+			productName = CombineExt;
 		};
 		87A6185B2B945DD200A80DB4 /* ModernRIBs */ = {
 			isa = XCSwiftPackageProductDependency;

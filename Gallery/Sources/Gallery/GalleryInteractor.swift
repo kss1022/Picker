@@ -7,6 +7,8 @@
 
 import ModernRIBs
 import Permission
+import AlbumRepository
+import AlbumEntity
 
 
 protocol GalleryRouting: ViewableRouting {
@@ -17,6 +19,8 @@ protocol GalleryPresentable: Presentable {
     func showPermissionDenied()
     func showPermissionLimited()
     func openSetting()
+        
+    func showAlbum(_ viewModel: AlbumViewModel)
 }
 
 protocol GalleryListener: AnyObject {
@@ -24,6 +28,7 @@ protocol GalleryListener: AnyObject {
 
 protocol GalleryInteractorDependency{
     var permission: Permission{ get }
+    var albumRepository: AlbumRepository{ get }
 }
 
 final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, GalleryInteractable, GalleryPresentableListener {
@@ -33,6 +38,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
 
     private let dependency: GalleryInteractorDependency
     private let permission : Permission
+    private let albumRepository: AlbumRepository
     
     init(
         presenter: GalleryPresentable,
@@ -40,6 +46,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     ) {
         self.dependency = dependency
         self.permission = dependency.permission
+        self.albumRepository = dependency.albumRepository
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -60,15 +67,19 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     func checkPermssion() async{
         await permission.checkPhotoPermission()
     }
-    
-    @MainActor
+        
     func showPermissionState() async{
         switch permission.photoStatus() {
-        case .notDetermined: fatalError()
-        case .restricted: presenter.showPermissionDenied()
-        case .denied: presenter.showPermissionDenied()
-        case .authorized: break
-        case .limited: presenter.showPermissionLimited()
+        case .notDetermined:  fatalError()
+        case .restricted: await MainActor.run { presenter.showPermissionDenied() }
+        case .denied: await MainActor.run { presenter.showPermissionDenied() }
+        case .authorized:
+            await albumRepository.fetch()
+            guard let album = albumRepository.albums.value.first else { return }
+            let viewModel = AlbumViewModel(album)
+            await MainActor.run { presenter.showAlbum(viewModel) }
+        case .limited:
+            await MainActor.run { presenter.showPermissionLimited() }
         }
     }
     

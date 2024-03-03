@@ -7,13 +7,16 @@
 
 import ModernRIBs
 import Permission
+import AlbumRepository
 
 protocol GalleryDependency: Dependency {
     var permission: Permission{ get }
+    var albumRepository: AlbumRepository{ get }
 }
 
 final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency {
     var permission: Permission{ dependency.permission }
+    var albumRepository: AlbumRepository{ dependency.albumRepository }
 }
 
 // MARK: - Builder
