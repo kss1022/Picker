@@ -13,21 +13,42 @@ let package = Package(
         .library(
             name: "Permission",
             targets: ["Permission"]
+        ),
+        .library(
+            name: "PermissionTestSupport",
+            targets: ["PermissionTestSupport"]
         )
+    ],
+    dependencies: [        
+        .package(url: "https://github.com/DevYeom/ModernRIBs", branch: "main"),
     ],
     targets: [
         .target(
-            name: "Gallery"
+            name: "Gallery",
+            dependencies: [
+                "ModernRIBs",
+                "Permission"
+            ]
         ),
         .target(
             name: "Permission"
         ),
+        .target(
+            name: "PermissionTestSupport"
+        ),
         .testTarget(
             name: "GalleryTests",
-            dependencies: ["Gallery"]),
+            dependencies: [
+                "Gallery",
+                "PermissionTestSupport"
+            ]
+        ),
         .testTarget(
             name: "PermissionTests",
-            dependencies: ["Permission"]
+            dependencies: [
+                "Permission",
+                "PermissionTestSupport"
+            ]
         )
     ]
 )

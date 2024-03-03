@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		871B814F2B945F130026F22D /* Gallery in Frameworks */ = {isa = PBXBuildFile; productRef = 871B814E2B945F130026F22D /* Gallery */; };
+		87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 87A6185B2B945DD200A80DB4 /* ModernRIBs */; };
 		87C786A52B91CB8F00B36D52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A42B91CB8F00B36D52 /* AppDelegate.swift */; };
 		87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */; };
 		87C786A92B91CB8F00B36D52 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A82B91CB8F00B36D52 /* ViewController.swift */; };
@@ -32,18 +34,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */,
+				871B814F2B945F130026F22D /* Gallery in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		871B814D2B945F130026F22D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		87C786982B91CB8F00B36D52 = {
 			isa = PBXGroup;
 			children = (
 				87A618592B9459AB00A80DB4 /* Gallery */,
 				87C786A32B91CB8F00B36D52 /* Picker */,
 				87C786A22B91CB8F00B36D52 /* Products */,
+				871B814D2B945F130026F22D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +97,10 @@
 			dependencies = (
 			);
 			name = Picker;
+			packageProductDependencies = (
+				87A6185B2B945DD200A80DB4 /* ModernRIBs */,
+				871B814E2B945F130026F22D /* Gallery */,
+			);
 			productName = Picker;
 			productReference = 87C786A12B91CB8F00B36D52 /* Picker.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +129,9 @@
 				Base,
 			);
 			mainGroup = 87C786982B91CB8F00B36D52;
+			packageReferences = (
+				87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */,
+			);
 			productRefGroup = 87C786A22B91CB8F00B36D52 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -375,6 +394,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DevYeom/ModernRIBs";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		871B814E2B945F130026F22D /* Gallery */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Gallery;
+		};
+		87A6185B2B945DD200A80DB4 /* ModernRIBs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */;
+			productName = ModernRIBs;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 87C786992B91CB8F00B36D52 /* Project object */;
 }

@@ -8,13 +8,18 @@
 import Foundation
 import Photos
 
+public protocol Permission{
+    func photoStatus() -> PhotoStatus
+    func checkPhotoPermission() async    
+}
 
-public class Permission{
+
+public class PermissionImp: Permission{
     
     private let photoPermission: PhotoPermission
     private let photoLibrary: PhotoLibrary
     
-    public var photoStatus: PhotoStatus{
+    public func photoStatus() -> PhotoStatus {
         photoPermission.status()
     }
             
@@ -24,7 +29,7 @@ public class Permission{
     }
     
     public func checkPhotoPermission() async{
-        if photoStatus != .notDetermined{
+        if photoStatus() != .notDetermined{
             return
         }
         await requestPhotoPermission()

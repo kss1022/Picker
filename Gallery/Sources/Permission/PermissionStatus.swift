@@ -35,16 +35,4 @@ internal struct PhotoPermission{
         @unknown default: fatalError("PHAuthorizationStatus not handled")
         }
     }
-    
-//    static var status: PhotoStatus{
-//        switch PHPhotoLibrary.authorizationStatus(for: .readWrite){
-//        case .notDetermined: .notDetermined
-//        case .restricted: .restricted
-//        case .denied: .denied
-//        case .authorized: .authorized
-//        case .limited: .limited
-//        @unknown default: fatalError("PHAuthorizationStatus not handled")
-//        }
-//    }
-
 }

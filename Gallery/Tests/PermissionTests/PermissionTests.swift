@@ -1,35 +1,36 @@
 import XCTest
+import PermissionTestSupport
 @testable import Permission
 
 final class PermissionTests: XCTestCase {
     
-    private var permission: Permission!
-    private var library: MockPhotoLibrary!
+    private var permission: PermissionImp!
+    private var library: PhotoLibraryMock!
     
     override func setUp() {
         super.setUp()
         
-        library = MockPhotoLibrary()
-        permission = Permission(library)
+        library = PhotoLibraryMock()
+        permission = PermissionImp(library)
     }
 
     func testCheckPhotoPermissionNotDetermied() async{
         library.authorizationStatus = .notDetermined
         await permission.checkPhotoPermission()
         library.didTapDenied()
-        XCTAssertNotEqual(PhotoStatus.notDetermined, permission.photoStatus)
+        XCTAssertNotEqual(PhotoStatus.notDetermined, permission.photoStatus())
     }
         
     func testCheckPhotoPermssionDenied() async{
         library.authorizationStatus = .denied
         await permission.checkPhotoPermission()        
-        XCTAssertEqual(PhotoStatus.denied, permission.photoStatus)
+        XCTAssertEqual(PhotoStatus.denied, permission.photoStatus())
     }
     
     func testCheckPhotoPermssionAuthorized() async{
         library.authorizationStatus = .authorized
         await permission.checkPhotoPermission()
-        XCTAssertEqual(PhotoStatus.authorized, permission.photoStatus)
+        XCTAssertEqual(PhotoStatus.authorized, permission.photoStatus())
     }
     
     
@@ -37,7 +38,7 @@ final class PermissionTests: XCTestCase {
         library.authorizationStatus = .notDetermined
         await permission.checkPhotoPermission()
         library.didTapAuthorized()
-        XCTAssertEqual(PhotoStatus.authorized, permission.photoStatus)
+        XCTAssertEqual(PhotoStatus.authorized, permission.photoStatus())
     }
     
     
