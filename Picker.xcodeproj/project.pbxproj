@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87029A132B95CD3B000538EE /* PhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 87029A122B95CD3B000538EE /* PhotoPicker */; };
 		871B814F2B945F130026F22D /* Gallery in Frameworks */ = {isa = PBXBuildFile; productRef = 871B814E2B945F130026F22D /* Gallery */; };
 		8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = 8775115D2B947F9F00EE2652 /* CombineExt */; };
 		87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 87A6185B2B945DD200A80DB4 /* ModernRIBs */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		870299FF2B95C951000538EE /* PhotoPicker */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PhotoPicker; sourceTree = "<group>"; };
 		8775115B2B947F6900EE2652 /* Platform */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Platform; path = ../Platform; sourceTree = "<group>"; };
 		87A618592B9459AB00A80DB4 /* Gallery */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gallery; sourceTree = "<group>"; };
 		87C786A12B91CB8F00B36D52 /* Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Picker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,6 +41,7 @@
 				87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */,
 				8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */,
 				871B814F2B945F130026F22D /* Gallery in Frameworks */,
+				87029A132B95CD3B000538EE /* PhotoPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,8 +59,9 @@
 			isa = PBXGroup;
 			children = (
 				8775115B2B947F6900EE2652 /* Platform */,
+				870299FF2B95C951000538EE /* PhotoPicker */,
 				87A618592B9459AB00A80DB4 /* Gallery */,
-				87C786A32B91CB8F00B36D52 /* Picker */,
+				87C786A32B91CB8F00B36D52 /* Example */,
 				87C786A22B91CB8F00B36D52 /* Products */,
 				871B814D2B945F130026F22D /* Frameworks */,
 			);
@@ -71,7 +75,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		87C786A32B91CB8F00B36D52 /* Picker */ = {
+		87C786A32B91CB8F00B36D52 /* Example */ = {
 			isa = PBXGroup;
 			children = (
 				87C786A42B91CB8F00B36D52 /* AppDelegate.swift */,
@@ -82,7 +86,7 @@
 				87C786AF2B91CB9100B36D52 /* LaunchScreen.storyboard */,
 				87C786B22B91CB9100B36D52 /* Info.plist */,
 			);
-			path = Picker;
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -105,6 +109,7 @@
 				87A6185B2B945DD200A80DB4 /* ModernRIBs */,
 				871B814E2B945F130026F22D /* Gallery */,
 				8775115D2B947F9F00EE2652 /* CombineExt */,
+				87029A122B95CD3B000538EE /* PhotoPicker */,
 			);
 			productName = Picker;
 			productReference = 87C786A12B91CB8F00B36D52 /* Picker.app */;
@@ -321,7 +326,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ADAV929TJ6;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Picker/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -354,7 +359,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ADAV929TJ6;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Picker/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -421,6 +426,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		87029A122B95CD3B000538EE /* PhotoPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhotoPicker;
+		};
 		871B814E2B945F130026F22D /* Gallery */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gallery;

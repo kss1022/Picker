@@ -13,7 +13,6 @@ protocol GalleryInteractable: Interactable {
 }
 
 protocol GalleryViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
 }
 
 final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewControllable>, GalleryRouting {

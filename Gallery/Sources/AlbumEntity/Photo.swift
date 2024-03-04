@@ -11,7 +11,7 @@ import Photos
 
 public struct Photo{
     
-    let asset: PHAsset
+    public let asset: PHAsset
     
     public init(_ asset: PHAsset) {
         self.asset = asset

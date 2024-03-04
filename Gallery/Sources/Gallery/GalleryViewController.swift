@@ -9,6 +9,7 @@ import ModernRIBs
 import UIKit
 
 protocol GalleryPresentableListener: AnyObject {
+    func doneButtonDidTap()
     func permissionButtonDidTap()
 }
 
@@ -16,6 +17,21 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
 
     weak var listener: GalleryPresentableListener?
     
+    private lazy var doneBarButtonItem: UIBarButtonItem = {
+        let barbuttonItem = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(doneBarButttonItemTap)
+        )
+        return barbuttonItem
+    }()
+    
+    private let photoGridView: PhotoGridView = {
+        let photoGridView = PhotoGridView()
+        photoGridView.translatesAutoresizingMaskIntoConstraints = false
+        return photoGridView
+    }()
+            
     private lazy var permissionDeniedButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("사진 접근 허용하기", for: .normal)
@@ -43,12 +59,23 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         setLayout()
     }
     
-    private func setLayout(){
+    private func setLayout(){                
+        view.backgroundColor = .systemBackground
+        
+        navigationItem.rightBarButtonItem = doneBarButtonItem
+        
+        view.addSubview(photoGridView)
+        
         view.addSubview(permissionDeniedButton)
         view.addSubview(permissionLimitedButton)
         
         
         NSLayoutConstraint.activate([
+            photoGridView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            photoGridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            photoGridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            photoGridView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             permissionDeniedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             permissionDeniedButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
@@ -56,6 +83,8 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
             permissionLimitedButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             permissionLimitedButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
+        
+        
     }
 
     func showPermissionDenied() {
@@ -73,8 +102,15 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     func showAlbum(_ viewModel: AlbumViewModel) {
         //shwoTitle
         //showPhotos
+        title = viewModel.name
+        photoGridView.showPhotos(viewModel)
     }
     
+    
+    @objc
+    private func doneBarButttonItemTap(){
+        listener?.doneButtonDidTap()
+    }
     
     @objc
     private func permissionButtonTap(){

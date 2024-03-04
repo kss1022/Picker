@@ -11,7 +11,7 @@ import AlbumRepository
 import AlbumEntity
 
 
-protocol GalleryRouting: ViewableRouting {
+public protocol GalleryRouting: ViewableRouting {
 }
 
 protocol GalleryPresentable: Presentable {
@@ -23,7 +23,8 @@ protocol GalleryPresentable: Presentable {
     func showAlbum(_ viewModel: AlbumViewModel)
 }
 
-protocol GalleryListener: AnyObject {
+public protocol GalleryListener: AnyObject {
+    func galleryDidFinish()
 }
 
 protocol GalleryInteractorDependency{
@@ -84,6 +85,10 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     }
     
     //MARK: PresnetableListener
+    func doneButtonDidTap() {
+        listener?.galleryDidFinish()
+    }
+    
     func permissionButtonDidTap() {
         presenter.openSetting()
     }

@@ -39,9 +39,10 @@ let package = Package(
         .target(
             name: "Gallery",
             dependencies: [
+                .product(name: "UIUtils", package: "Platform"),
                 "ModernRIBs",
                 "Permission",
-                "AlbumRepository"
+                "AlbumRepository",
             ]
         ),
         .target(

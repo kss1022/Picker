@@ -19,7 +19,8 @@ struct AlbumViewModel: Equatable{
     }
     
     public var count: Int{
-        fetchResult.countOfAssets(with: .image)
+        assert(fetchResult.countOfAssets(with: .image) == fetchResult.count)
+        return fetchResult.count
     }
         
     init(_ album: Album){

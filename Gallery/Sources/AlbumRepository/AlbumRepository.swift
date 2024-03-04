@@ -16,17 +16,17 @@ public protocol AlbumRepository{
 }
 
 
-final class AlbumRepositoryImp: AlbumRepository{
+public final class AlbumRepositoryImp: AlbumRepository{
     
     
-    var albums: ReadOnlyCurrentValuePublisher<[Album]>{ albumsSubject }
+    public var albums: ReadOnlyCurrentValuePublisher<[Album]>{ albumsSubject }
     private let albumsSubject = CurrentValuePublisher<[Album]>([])
     
     
     typealias AlbumType = (type: PHAssetCollectionType, subType: PHAssetCollectionSubtype)
     
     
-    func fetch() async{
+    public func fetch() async{
         let collections = [
             AlbumType(.smartAlbum, .smartAlbumUserLibrary),
             AlbumType(.smartAlbum, .smartAlbumFavorites),
@@ -49,5 +49,8 @@ final class AlbumRepositoryImp: AlbumRepository{
         
         let albums = collections.map(Album.init)            
         albumsSubject.send(albums)
+    }
+    
+    public init(){        
     }
 }
