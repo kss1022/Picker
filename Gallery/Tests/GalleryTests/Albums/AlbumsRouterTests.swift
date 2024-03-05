@@ -1,16 +1,16 @@
 //
-//  GalleryRouterTests.swift
+//  AlbumsRouterTests.swift
 //  Picker
 //
-//  Created by 한현규 on 3/3/24.
+//  Created by 한현규 on 3/5/24.
 //
 
-@testable import Gallery
+@testable import Albums
 import XCTest
 
-final class GalleryRouterTests: XCTestCase {
+final class AlbumsRouterTests: XCTestCase {
 
-    private var router: GalleryRouter!
+    private var router: AlbumsRouter!
 
     // TODO: declare other objects and mocks you need as private vars
 

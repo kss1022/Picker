@@ -16,7 +16,8 @@ import XCTest
 
 final class GalleryInteractorTests: XCTestCase {
     
-    private var interactor: GalleryInteractor!
+    private var sut: GalleryInteractor!
+    
     private var presentable: GalleryPresentableMock!
     private var dependecny: GalleryInteractorDependency!
     
@@ -35,21 +36,21 @@ final class GalleryInteractorTests: XCTestCase {
         self.presentable = GalleryPresentableMock()
         self.dependecny = GalleryDependencyMock()
         
-        self.interactor = GalleryInteractor(presenter: presentable, dependency: dependecny)
+        self.sut = GalleryInteractor(presenter: presentable, dependency: dependecny)
     }
     
     // MARK: - Tests
     
     func testCheckPermissionCall() async{
-        await interactor.checkPermssion()
+        await sut.checkPermssion()
         
         XCTAssertEqual(1, permission.checkPhotoPermissionCallCount)
     }
     
     func testShowPermissionDenied() async{
-        await interactor.checkPermssion()
+        await sut.checkPermssion()
         permission.photoStatusMock = .denied
-        await interactor.showPermissionState()
+        await sut.showPermissionState()
                 
         XCTAssertEqual(1, presentable.showPermissionDeniedCallCount)
         XCTAssertEqual(false, presentable.permissionDeniedIsHidden)
@@ -57,9 +58,9 @@ final class GalleryInteractorTests: XCTestCase {
     }
     
     func testShowPermissionLimited() async{                
-        await interactor.checkPermssion()
+        await sut.checkPermssion()
         permission.photoStatusMock = .limited
-        await interactor.showPermissionState()
+        await sut.showPermissionState()
         
         XCTAssertEqual(true, presentable.permissionDeniedIsHidden)
         XCTAssertEqual(false, presentable.permissionLimitedIsHidden)
@@ -68,13 +69,13 @@ final class GalleryInteractorTests: XCTestCase {
     
     
     func testShowAlbum() async{
-        await interactor.checkPermssion()
+        await sut.checkPermssion()
         permission.photoStatusMock = .authorized
         
         let album = Album()
         albumRepository.albumsSubjects.send([album])
         
-        await interactor.showPermissionState()
+        await sut.showPermissionState()
                 
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)

@@ -9,7 +9,16 @@ let package = Package(
     products: [
         .library(
             name: "Gallery",
-            targets: ["Gallery"]),
+            targets: ["Gallery"])
+        ,
+        .library(
+            name: "GalleryUtils",
+            targets: ["GalleryUtils"]
+        ),
+        .library(
+            name: "Albums",
+            targets: ["Albums"]
+        ),
         .library(
             name: "Permission",
             targets: ["Permission"]
@@ -41,7 +50,21 @@ let package = Package(
             dependencies: [
                 .product(name: "UIUtils", package: "Platform"),
                 "ModernRIBs",
+                "GalleryUtils",
                 "Permission",
+                "AlbumRepository",
+                "Albums"
+            ]
+        ),
+        .target(
+            name: "GalleryUtils"
+        ),
+        .target(
+            name: "Albums",
+            dependencies: [
+                .product(name: "UIUtils", package: "Platform"),
+                "ModernRIBs",
+                "GalleryUtils",
                 "AlbumRepository",
             ]
         ),
@@ -68,16 +91,11 @@ let package = Package(
             name: "GalleryTests",
             dependencies: [
                 "Gallery",
+                "Albums",
                 "PermissionTestSupport",
-                "AlbumRepositoryTestSupport"
+                "AlbumRepositoryTestSupport",
+                .product(name: "RIBsTestSupports", package: "Platform")
             ]
-        ),
-        .testTarget(
-            name: "PermissionTests",
-            dependencies: [
-                "Permission",
-                "PermissionTestSupport"
-            ]
-        )
+        )        
     ]
 )

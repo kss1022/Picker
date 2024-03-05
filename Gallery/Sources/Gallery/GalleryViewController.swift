@@ -9,6 +9,7 @@ import ModernRIBs
 import UIKit
 
 protocol GalleryPresentableListener: AnyObject {
+    func titleViewDidTap()
     func doneButtonDidTap()
     func permissionButtonDidTap()
 }
@@ -16,6 +17,14 @@ protocol GalleryPresentableListener: AnyObject {
 final class GalleryViewController: UIViewController, GalleryPresentable, GalleryViewControllable {
 
     weak var listener: GalleryPresentableListener?
+    
+    private lazy var titleView: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .bold)
+        button.addTarget(self, action: #selector(titleViewTap), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var doneBarButtonItem: UIBarButtonItem = {
         let barbuttonItem = UIBarButtonItem(
@@ -72,8 +81,8 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         
         NSLayoutConstraint.activate([
             photoGridView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photoGridView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            photoGridView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            photoGridView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            photoGridView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             photoGridView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             permissionDeniedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -86,7 +95,40 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         
         
     }
+    
+    //MARK: ViewControllerable
+    func showAlbums(_ view: ViewControllable) {
+        let vc = view.uiviewController
+        
+        let view = vc.view!
+        photoGridView.addSubview(view)
+        
+        view.clipsToBounds = true
+                    
+        
+        view.bounds.origin.y = view.frame.height
+        UIView.animate(withDuration: 0.25) {
+            view.bounds.origin.y = 0
+        }
+                
+        vc.didMove(toParent: self)
+    }
+    
+    func hideAlbums(_ view: ViewControllable) {
+        let vc = view.uiviewController
+        
+        let view = vc.view!
+        
+        UIView.animate(withDuration: 0.25) {
+            view.bounds.origin.y = view.frame.height
+        } completion: { _ in
+            view.removeFromSuperview()
+            vc.didMove(toParent: nil)
+        }
+    }
 
+    
+    //MARK: Prsentable
     func showPermissionDenied() {
         permissionDeniedButton.isHidden = false
     }
@@ -102,10 +144,18 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     func showAlbum(_ viewModel: AlbumViewModel) {
         //shwoTitle
         //showPhotos
-        title = viewModel.name
+        navigationItem.titleView = nil
+        titleView.setTitle(viewModel.name, for: .normal)
+        navigationItem.titleView = titleView
+        
         photoGridView.showPhotos(viewModel)
     }
     
+    
+    @objc
+    private func titleViewTap(){
+        listener?.titleViewDidTap()
+    }
     
     @objc
     private func doneBarButttonItemTap(){

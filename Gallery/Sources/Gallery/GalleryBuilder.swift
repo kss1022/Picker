@@ -8,13 +8,14 @@
 import ModernRIBs
 import Permission
 import AlbumRepository
+import Albums
 
 public protocol GalleryDependency: Dependency {
     var permission: Permission{ get }
     var albumRepository: AlbumRepository{ get }
 }
 
-final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency {
+final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency , AlbumsDependency{
     var permission: Permission{ dependency.permission }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
 }
@@ -36,6 +37,13 @@ public final class GalleryBuilder: Builder<GalleryDependency>, GalleryBuildable 
         let viewController = GalleryViewController()
         let interactor = GalleryInteractor(presenter: viewController, dependency: component)
         interactor.listener = listener
-        return GalleryRouter(interactor: interactor, viewController: viewController)
+        
+        let albumsBuilder = AlbumsBuilder(dependency: component)
+        
+        return GalleryRouter(
+            interactor: interactor,
+            viewController: viewController,
+            albumsBuildable: albumsBuilder
+        )
     }
 }

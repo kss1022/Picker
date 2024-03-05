@@ -12,6 +12,8 @@ import AlbumEntity
 
 
 public protocol GalleryRouting: ViewableRouting {
+    func attachAlbums()
+    func detachAlbums()
 }
 
 protocol GalleryPresentable: Presentable {
@@ -40,6 +42,8 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     private let dependency: GalleryInteractorDependency
     private let permission : Permission
     private let albumRepository: AlbumRepository
+    
+    private var showAlbum: Bool = false
     
     init(
         presenter: GalleryPresentable,
@@ -77,14 +81,30 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         case .authorized:
             await albumRepository.fetch()
             guard let album = albumRepository.albums.value.first else { return }
-            let viewModel = AlbumViewModel(album)
-            await MainActor.run { presenter.showAlbum(viewModel) }
+            await MainActor.run { presenter.showAlbum(AlbumViewModel(album)) }
         case .limited:
             await MainActor.run { presenter.showPermissionLimited() }
         }
     }
+        
     
-    //MARK: PresnetableListener
+    func titleViewDidTap() {
+        showAlbum.toggle()
+        
+        if showAlbum{
+            router?.attachAlbums()
+            return
+        }
+        
+        router?.detachAlbums()
+    }
+    
+    func albumsDidFinish(_ album: Album) {                
+        showAlbum = false
+        router?.detachAlbums()
+        presenter.showAlbum(AlbumViewModel(album))
+    }
+    
     func doneButtonDidTap() {
         listener?.galleryDidFinish()
     }

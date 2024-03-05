@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import GalleryUtils
 
 final class PhotoCell: UICollectionViewCell{
             

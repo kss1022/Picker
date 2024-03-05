@@ -10,7 +10,11 @@ import Permission
 import PermissionTestSupport
 import AlbumRepository
 import AlbumRepositoryTestSupport
-
+import AlbumEntity
+import ModernRIBs
+import RIBsTestSupports
+import UIKit
+import Combine
 
 
 final class GalleryDependencyMock: GalleryInteractorDependency{
@@ -22,8 +26,6 @@ final class GalleryDependencyMock: GalleryInteractorDependency{
         self.permission = PermissionMock()
         self.albumRepository = AlbumRepositoryMock()
     }
-    
-    
 }
 
 
@@ -59,4 +61,51 @@ final class GalleryPresentableMock: GalleryPresentable{
         album = viewModel
     }
     
+}
+
+
+
+final class GalleryInteractorMock: GalleryInteractable{
+    var router: GalleryRouting?
+    
+    var listener: GalleryListener?
+    
+    func activate() {
+        
+    }
+    
+    func deactivate() {
+        
+    }
+    
+    var albumsDidFinishAlbum: Album?
+    var albumsDidFinishCallCount = 0
+    func albumsDidFinish(_ album: Album) {
+        albumsDidFinishCallCount += 1
+        albumsDidFinishAlbum = album
+    }
+    
+    var isActive: Bool { isActiveSubject.value }
+    var isActiveStream: AnyPublisher<Bool, Never> { isActiveSubject.eraseToAnyPublisher() }
+    private let isActiveSubject = CurrentValueSubject<Bool, Never>(false)
+    
+    
+}
+
+
+
+final class GalleryViewControllableMock: GalleryViewControllable{
+    
+    var showAlbumsCallCount = 0
+    func showAlbums(_ view: ViewControllable) {
+        showAlbumsCallCount += 1
+    }
+    
+    var hideAlbumsCallCount = 0
+    func hideAlbums(_ view: ViewControllable) {
+        hideAlbumsCallCount += 1
+    }
+    
+    var uiviewController: UIViewController = UIViewController()
+        
 }
