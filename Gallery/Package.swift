@@ -24,6 +24,10 @@ let package = Package(
             targets: ["Permission"]
         ),
         .library(
+            name: "Selection",
+            targets: ["Selection"]
+        ),
+        .library(
             name: "AlbumRepository",
             targets: ["AlbumRepository"]
         ),
@@ -52,6 +56,7 @@ let package = Package(
                 "ModernRIBs",
                 "GalleryUtils",
                 "Permission",
+                "Selection",
                 "AlbumRepository",
                 "Albums"
             ]
@@ -70,6 +75,12 @@ let package = Package(
         ),
         .target(
             name: "Permission"
+        ),
+        .target(
+            name: "Selection",
+            dependencies: [
+                "AlbumEntity"
+            ]
         ),
         .target(
             name: "AlbumRepository",
