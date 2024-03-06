@@ -8,6 +8,7 @@
 @testable import Gallery
 import Permission
 import PermissionTestSupport
+import Selection
 import AlbumRepository
 import AlbumRepositoryTestSupport
 import AlbumEntity
@@ -65,9 +66,7 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual(true, presentable.permissionDeniedIsHidden)
         XCTAssertEqual(false, presentable.permissionLimitedIsHidden)
     }
-    
-    
-    
+            
     func testShowAlbum() async{
         await sut.checkPermssion()
         permission.photoStatusMock = .authorized
@@ -80,6 +79,14 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)
         XCTAssertEqual(1, presentable.showAlbumCallCount)
-        XCTAssertEqual(AlbumViewModel(album), presentable.album)
+        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.album)
+    }
+    
+    func testShowSelectionCount(){
+        sut.photoDidtap(Photo())
+        sut.photoDidtap(Photo())
+        
+        XCTAssertEqual(2, presentable.showSelectionCountCallCount)
+        XCTAssertEqual("2", presentable.showSelectionCount)
     }
 }

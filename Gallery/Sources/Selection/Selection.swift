@@ -16,6 +16,10 @@ public final class Selection{
 
     
     public func select(_ photo: Photo){
+        if selectedItems.count == limit{
+            return
+        }
+        
         selectedItems.append(photo)
     }
     
@@ -47,6 +51,17 @@ public final class Selection{
         self.limit = limit
     }
     
+    public func selectNum(_ photo: Photo) -> Int{
+        var result = 0
+        for i in 0..<selectedItems.count{
+            if selectedItems[i] == photo{
+                result = i + 1
+                break
+            }
+        }
+        
+        return result
+    }
     
     public func isSelect(_ photo: Photo) -> Bool{
         selectedItems.contains { $0 == photo }

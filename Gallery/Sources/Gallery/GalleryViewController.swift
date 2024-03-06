@@ -7,11 +7,14 @@
 
 import ModernRIBs
 import UIKit
+import AlbumEntity
 
-protocol GalleryPresentableListener: AnyObject {
+
+protocol GalleryPresentableListener: AnyObject {    
     func titleViewDidTap()
     func doneButtonDidTap()
     func permissionButtonDidTap()
+    func photoDidtap(_ photo: Photo)
 }
 
 final class GalleryViewController: UIViewController, GalleryPresentable, GalleryViewControllable {
@@ -26,18 +29,21 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         return button
     }()
     
-    private lazy var doneBarButtonItem: UIBarButtonItem = {
-        let barbuttonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
-            target: self,
-            action: #selector(doneBarButttonItemTap)
-        )
-        return barbuttonItem
+    private lazy var doneBarButtonItem: DoneBarButtonItem = {
+        let barButtonItem = DoneBarButtonItem()
+        barButtonItem.translatesAutoresizingMaskIntoConstraints = false
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(doneBarButtonItemTap))
+        barButtonItem.addGestureRecognizer(tapGesture)
+                
+        return barButtonItem
     }()
     
-    private let photoGridView: PhotoGridView = {
+    
+    private lazy var photoGridView: PhotoGridView = {
         let photoGridView = PhotoGridView()
         photoGridView.translatesAutoresizingMaskIntoConstraints = false
+        photoGridView.delegate = self
         return photoGridView
     }()
             
@@ -71,8 +77,8 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     private func setLayout(){                
         view.backgroundColor = .systemBackground
         
-        navigationItem.rightBarButtonItem = doneBarButtonItem
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBarButtonItem)
+
         view.addSubview(photoGridView)
         
         view.addSubview(permissionDeniedButton)
@@ -93,7 +99,7 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
             permissionLimitedButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
         
-        
+     
     }
     
     //MARK: ViewControllerable
@@ -141,16 +147,16 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         URLSchemeManager.shared.openSetting()
     }
     
-    func showAlbum(_ viewModel: AlbumViewModel) {
-        //shwoTitle
-        //showPhotos
+    func showAlbum(_ viewModel: PhotoGridViewModel) {
         navigationItem.titleView = nil
         titleView.setTitle(viewModel.name, for: .normal)
         navigationItem.titleView = titleView
-        
         photoGridView.showPhotos(viewModel)
     }
     
+    func showSelectionCount(_ count: Int) {
+        doneBarButtonItem.count(count)
+    }
     
     @objc
     private func titleViewTap(){
@@ -158,12 +164,19 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     }
     
     @objc
-    private func doneBarButttonItemTap(){
+    private func doneBarButtonItemTap(){
         listener?.doneButtonDidTap()
     }
     
     @objc
     private func permissionButtonTap(){
         listener?.permissionButtonDidTap()
+    }
+}
+
+
+extension GalleryViewController: PhotoGridViewDelegate{
+    func photoDidTap(_ photo: Photo) {
+        listener?.photoDidtap(photo)
     }
 }

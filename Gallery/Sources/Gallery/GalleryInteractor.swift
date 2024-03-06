@@ -9,6 +9,7 @@ import ModernRIBs
 import Permission
 import AlbumRepository
 import AlbumEntity
+import Selection
 
 
 public protocol GalleryRouting: ViewableRouting {
@@ -18,11 +19,14 @@ public protocol GalleryRouting: ViewableRouting {
 
 protocol GalleryPresentable: Presentable {
     var listener: GalleryPresentableListener? { get set }
+    
     func showPermissionDenied()
     func showPermissionLimited()
     func openSetting()
         
-    func showAlbum(_ viewModel: AlbumViewModel)
+    func showAlbum(_ viewModel: PhotoGridViewModel)
+    
+    func showSelectionCount(_ count: Int)
 }
 
 public protocol GalleryListener: AnyObject {
@@ -44,6 +48,8 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     private let albumRepository: AlbumRepository
     
     private var showAlbum: Bool = false
+        
+    private var selection: Selection
     
     init(
         presenter: GalleryPresentable,
@@ -52,6 +58,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         self.dependency = dependency
         self.permission = dependency.permission
         self.albumRepository = dependency.albumRepository
+        self.selection = Selection()
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -81,7 +88,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         case .authorized:
             await albumRepository.fetch()
             guard let album = albumRepository.albums.value.first else { return }
-            await MainActor.run { presenter.showAlbum(AlbumViewModel(album)) }
+            await MainActor.run { presenter.showAlbum(PhotoGridViewModel(album, selection)) }
         case .limited:
             await MainActor.run { presenter.showPermissionLimited() }
         }
@@ -102,7 +109,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     func albumsDidFinish(_ album: Album) {                
         showAlbum = false
         router?.detachAlbums()
-        presenter.showAlbum(AlbumViewModel(album))
+        presenter.showAlbum(PhotoGridViewModel(album, selection))
     }
     
     func doneButtonDidTap() {
@@ -111,6 +118,11 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     
     func permissionButtonDidTap() {
         presenter.openSetting()
+    }
+    
+    func photoDidtap(_ photo: Photo) {
+        selection.toogle(photo)
+        presenter.showSelectionCount(selection.count)
     }
 }
 

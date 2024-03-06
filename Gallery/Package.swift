@@ -62,7 +62,10 @@ let package = Package(
             ]
         ),
         .target(
-            name: "GalleryUtils"
+            name: "GalleryUtils",
+            dependencies: [
+                .product(name: "UIUtils", package: "Platform"),
+            ]
         ),
         .target(
             name: "Albums",

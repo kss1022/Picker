@@ -7,23 +7,39 @@
 
 import UIKit
 import UIUtils
+import GalleryUtils
+import Selection
+import AlbumEntity
 
+
+protocol PhotoGridViewDelegate: AnyObject{
+    func photoDidTap(_ photo: Photo)
+}
 
 final class PhotoGridView: UIView{
     
+    private var viewModel: PhotoGridViewModel?
+    weak var delegate: PhotoGridViewDelegate?
+            
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
-        collectionView.collectionViewLayout = getCollectionViewLayout()
-
-        collectionView.register(cellType: PhotoCell.self)
+        collectionView.delegate = self
+        collectionView.prefetchDataSource = self
         
+        collectionView.collectionViewLayout = getCollectionViewLayout()
+        collectionView.register(cellType: PhotoCell.self)
+                
+        collectionView.allowsSelection = true
+        collectionView.allowsMultipleSelection = true
+        
+        collectionView.showsVerticalScrollIndicator = false
+
         return collectionView
     }()
     
-    private var viewModel: AlbumViewModel?
     
     init(){
         super.init(frame: .zero)
@@ -31,7 +47,7 @@ final class PhotoGridView: UIView{
         setView()
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {        
         super.init(coder: coder)
         
         setView()
@@ -50,7 +66,7 @@ final class PhotoGridView: UIView{
     }
     
     
-    func showPhotos(_ viewModel: AlbumViewModel){
+    func showPhotos(_ viewModel: PhotoGridViewModel){
         self.viewModel = viewModel
         collectionView.reloadData()
     }
@@ -95,8 +111,40 @@ extension PhotoGridView: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: PhotoCell.self)
-        let viewModel = PhotoViewModel(viewModel!.photo(indexPath.row)) 
+        let viewModel = PhotoGridCellViewModel(
+            photo: viewModel!.photo(indexPath.row),
+            isSelect: viewModel!.isSelect(indexPath.row),
+            selectNum: viewModel!.selectNum(indexPath.row)
+        )
         cell.bindPhoto(viewModel)
         return cell
+    }
+}
+
+extension PhotoGridView: UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photo = viewModel!.photo(indexPath.row)
+        delegate?.photoDidTap(photo)
+        
+        UIView.performWithoutAnimation {
+            collectionView.reloadData()
+        }
+    }
+}
+
+extension PhotoGridView: UICollectionViewDataSourcePrefetching{
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let assets = indexPaths
+            .compactMap { viewModel!.photo($0.row) }
+            .map { $0.asset }
+        PHAssetCacheManager.shared().startCachingImages(for: assets)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        let assets = indexPaths
+            .compactMap { viewModel!.photo($0.row) }
+            .map { $0.asset }
+        PHAssetCacheManager.shared().stopCachingImages(for: assets)
     }
 }

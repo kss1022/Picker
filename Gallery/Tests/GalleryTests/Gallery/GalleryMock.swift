@@ -8,6 +8,7 @@
 @testable import Gallery
 import Permission
 import PermissionTestSupport
+import Selection
 import AlbumRepository
 import AlbumRepositoryTestSupport
 import AlbumEntity
@@ -30,8 +31,9 @@ final class GalleryDependencyMock: GalleryInteractorDependency{
 
 
 final class GalleryPresentableMock: GalleryPresentable{
+        
     var listener: GalleryPresentableListener?
-    
+    var selector: Selection?
     
     var permissionDeniedIsHidden = true
     var permissionLimitedIsHidden = true
@@ -55,10 +57,17 @@ final class GalleryPresentableMock: GalleryPresentable{
     
     
     var showAlbumCallCount = 0
-    var album: AlbumViewModel?
-    func showAlbum(_ viewModel: AlbumViewModel) {
+    var album: PhotoGridViewModel?
+    func showAlbum(_ viewModel: PhotoGridViewModel) {
         showAlbumCallCount += 1
         album = viewModel
+    }
+    
+    var showSelectionCountCallCount = 0
+    var showSelectionCount = 0
+    func showSelectionCount(_ count: Int) {
+        showSelectionCountCallCount += 1
+        showSelectionCount = count
     }
     
 }

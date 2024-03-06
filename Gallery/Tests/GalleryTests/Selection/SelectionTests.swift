@@ -74,19 +74,54 @@ final class SelectionTests: XCTestCase {
         XCTAssertEqual(false, sut.isEmpty)
     }
     
-    
-    func testSetLimitFail(){
+    func testSelectWhenLimited(){
         sut.setLimit(1)
         
         sut.select(Photo())
         sut.select(Photo())
-        sut.select(Photo())
         
-        sut.setLimit(2)
-        
-        XCTAssertEqual(1, sut.limit)
+        XCTAssertEqual(1, sut.count)
     }
     
+    func testSetLimitFail(){
+        sut.setLimit(2)
+        
+        sut.select(Photo())
+        sut.select(Photo())
+        sut.select(Photo())
+        
+        sut.setLimit(1)
+        
+        XCTAssertEqual(2, sut.limit)
+    }
+    
+    
+    func testSelectNum(){
+        let firstPhoto = Photo()
+        let secondPhoto = Photo()
+        let thirdPhoto = Photo()
+        
+        sut.select(firstPhoto)
+        sut.select(secondPhoto)
+        sut.select(thirdPhoto)
+        
+        XCTAssertEqual(1, sut.selectNum(firstPhoto))
+    }
+    
+    func testDeselectNum(){
+        let firstPhoto = Photo()
+        let secondPhoto = Photo()
+        let thirdPhoto = Photo()
+        
+        sut.select(firstPhoto)
+        sut.select(secondPhoto)
+        sut.select(thirdPhoto)
+        
+        
+        sut.deSelect(secondPhoto)
+        
+        XCTAssertEqual(2, sut.selectNum(thirdPhoto))
+    }
     
     
 }
