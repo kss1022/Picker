@@ -5,19 +5,23 @@
 //  Created by 한현규 on 3/3/24.
 //
 
+import Foundation
 import ModernRIBs
 import Permission
 import AlbumRepository
 import Albums
+import CombineSchedulers
 
 public protocol GalleryDependency: Dependency {
     var permission: Permission{ get }
     var albumRepository: AlbumRepository{ get }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
 final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency , AlbumsDependency{
     var permission: Permission{ dependency.permission }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ dependency.mainQueue }
 }
 
 // MARK: - Builder

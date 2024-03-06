@@ -10,6 +10,7 @@
 		87029A132B95CD3B000538EE /* PhotoPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 87029A122B95CD3B000538EE /* PhotoPicker */; };
 		871B814F2B945F130026F22D /* Gallery in Frameworks */ = {isa = PBXBuildFile; productRef = 871B814E2B945F130026F22D /* Gallery */; };
 		8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = 8775115D2B947F9F00EE2652 /* CombineExt */; };
+		87994FB62B98585B00CD4EAC /* CombineSchedulers in Frameworks */ = {isa = PBXBuildFile; productRef = 87994FB52B98585B00CD4EAC /* CombineSchedulers */; };
 		87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 87A6185B2B945DD200A80DB4 /* ModernRIBs */; };
 		87C786A52B91CB8F00B36D52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A42B91CB8F00B36D52 /* AppDelegate.swift */; };
 		87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */; };
@@ -39,6 +40,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87A6185C2B945DD200A80DB4 /* ModernRIBs in Frameworks */,
+				87994FB62B98585B00CD4EAC /* CombineSchedulers in Frameworks */,
 				8775115E2B947F9F00EE2652 /* CombineExt in Frameworks */,
 				871B814F2B945F130026F22D /* Gallery in Frameworks */,
 				87029A132B95CD3B000538EE /* PhotoPicker in Frameworks */,
@@ -110,6 +112,7 @@
 				871B814E2B945F130026F22D /* Gallery */,
 				8775115D2B947F9F00EE2652 /* CombineExt */,
 				87029A122B95CD3B000538EE /* PhotoPicker */,
+				87994FB52B98585B00CD4EAC /* CombineSchedulers */,
 			);
 			productName = Picker;
 			productReference = 87C786A12B91CB8F00B36D52 /* Picker.app */;
@@ -142,6 +145,7 @@
 			packageReferences = (
 				87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */,
 				8775115C2B947F9F00EE2652 /* XCRemoteSwiftPackageReference "CombineExt" */,
+				87994FB42B98585B00CD4EAC /* XCRemoteSwiftPackageReference "combine-schedulers" */,
 			);
 			productRefGroup = 87C786A22B91CB8F00B36D52 /* Products */;
 			projectDirPath = "";
@@ -415,6 +419,14 @@
 				minimumVersion = 1.8.1;
 			};
 		};
+		87994FB42B98585B00CD4EAC /* XCRemoteSwiftPackageReference "combine-schedulers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/combine-schedulers";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		87A6185A2B945DD200A80DB4 /* XCRemoteSwiftPackageReference "ModernRIBs" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DevYeom/ModernRIBs";
@@ -438,6 +450,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8775115C2B947F9F00EE2652 /* XCRemoteSwiftPackageReference "CombineExt" */;
 			productName = CombineExt;
+		};
+		87994FB52B98585B00CD4EAC /* CombineSchedulers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87994FB42B98585B00CD4EAC /* XCRemoteSwiftPackageReference "combine-schedulers" */;
+			productName = CombineSchedulers;
 		};
 		87A6185B2B945DD200A80DB4 /* ModernRIBs */ = {
 			isa = XCSwiftPackageProductDependency;

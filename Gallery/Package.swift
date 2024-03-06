@@ -96,10 +96,16 @@ let package = Package(
             name: "AlbumEntity"
         ),
         .target(
-            name: "PermissionTestSupport"
+            name: "PermissionTestSupport",
+            dependencies: [
+                "Permission"
+            ]
         ),
         .target(
-            name: "AlbumRepositoryTestSupport"
+            name: "AlbumRepositoryTestSupport",
+            dependencies: [
+                "AlbumRepository"
+            ]
         ),
         .testTarget(
             name: "GalleryTests",

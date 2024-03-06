@@ -11,9 +11,12 @@ import AlbumEntity
 
 public final class AlbumRepositoryMock: AlbumRepository{
     
-    public var albums: ReadOnlyCurrentValuePublisher<[Album]>{ albumsSubjects }
-    public let albumsSubjects = CurrentValuePublisher<[Album]>([])
     
+    public var albums: ReadOnlyCurrentValuePublisher<[Album]>{ albumsSubject }
+    public let albumsSubject = CurrentValuePublisher<[Album]>([])
+        
+    public var albumChanges: ReadOnlyPassthroughPublisher<AlbumChange>{ albumChangesSubject }
+    public var albumChangesSubject = PassthroughPublisher<AlbumChange>()
         
     public init(){
         

@@ -13,15 +13,18 @@ import Photos
 public protocol AlbumRepository{
     func fetch() async
     var albums: ReadOnlyCurrentValuePublisher<[Album]>{ get }
+    var albumChanges: ReadOnlyPassthroughPublisher<AlbumChange>{ get }
 }
 
 
-public final class AlbumRepositoryImp: AlbumRepository{
-    
-    
+public final class AlbumRepositoryImp: NSObject, AlbumRepository, PHPhotoLibraryChangeObserver{
+        
     public var albums: ReadOnlyCurrentValuePublisher<[Album]>{ albumsSubject }
     private let albumsSubject = CurrentValuePublisher<[Album]>([])
     
+    public var albumChanges: ReadOnlyPassthroughPublisher<AlbumChange>{ albumChangesSubject }
+    private let albumChangesSubject = PassthroughPublisher<AlbumChange>()
+        
     
     typealias AlbumType = (type: PHAssetCollectionType, subType: PHAssetCollectionSubtype)
     
@@ -51,6 +54,18 @@ public final class AlbumRepositoryImp: AlbumRepository{
         albumsSubject.send(albums)
     }
     
-    public init(){        
+    public override init(){
+        super.init()
+        PHPhotoLibrary.shared().register(self)
     }
+    
+    deinit{
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
+        
+    
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        albumChangesSubject.send(AlbumChange(changeInstance))
+    }
+    
 }

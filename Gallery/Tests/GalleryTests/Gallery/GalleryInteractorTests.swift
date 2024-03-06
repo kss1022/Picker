@@ -72,7 +72,7 @@ final class GalleryInteractorTests: XCTestCase {
         permission.photoStatusMock = .authorized
         
         let album = Album()
-        albumRepository.albumsSubjects.send([album])
+        albumRepository.albumsSubject.send([album])
         
         await sut.showPermissionState()
                 
@@ -87,7 +87,7 @@ final class GalleryInteractorTests: XCTestCase {
         permission.photoStatusMock = .limited
         
         let album = Album()
-        albumRepository.albumsSubjects.send([album])
+        albumRepository.albumsSubject.send([album])
         
         await sut.showPermissionState()
                 
@@ -103,5 +103,25 @@ final class GalleryInteractorTests: XCTestCase {
         
         XCTAssertEqual(2, presentable.showSelectionCountCallCount)
         XCTAssertEqual(2, presentable.showSelectionCount)
+    }
+    
+    func testAlbumChanged(){
+        permission.photoStatusMock = .authorized
+        
+        sut.didBecomeActive()
+        
+        let change = AlbumChange()
+        albumRepository.albumChangesSubject.send(change)
+        XCTAssertEqual(1, presentable.albumChangedCallCount)
+    }
+    
+    func testLimitedAlubmChanged(){
+        permission.photoStatusMock = .limited
+        
+        sut.didBecomeActive()
+        
+        let change = AlbumChange()
+        albumRepository.albumChangesSubject.send(change)
+        XCTAssertEqual(1, presentable.limitedAlbumChangedCallCount)
     }
 }

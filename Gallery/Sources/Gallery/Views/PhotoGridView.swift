@@ -10,6 +10,7 @@ import UIUtils
 import GalleryUtils
 import Selection
 import AlbumEntity
+import Photos
 
 
 protocol PhotoGridViewDelegate: AnyObject{
@@ -71,6 +72,30 @@ final class PhotoGridView: UIView{
         collectionView.reloadData()
     }
     
+    func albumChanged(_ change: AlbumChange){
+        guard let fetchResult = viewModel?.fetchResult,
+              let changeDetails = change.changeDetails(fetchResult) else { return }
+        
+        viewModel?.fetchResult = changeDetails.fetchResult()
+                        
+        
+        if let insertedIndex = changeDetails.insertedIndex{
+            collectionView.insertItems(at: insertedIndex)
+        }
+        
+        if let removedIndexes = changeDetails.removedIndexes{
+            collectionView.deleteItems(at: removedIndexes)
+        }
+                
+        
+        if let changedIndex = changeDetails.changedIndex{
+            collectionView.reloadItems(at: changedIndex)
+        }
+    }
+    
+    func limitedAlbumChanged(){
+        collectionView.reloadData()
+    }
     
     private func getCollectionViewLayout() -> UICollectionViewLayout{
         let section = getListTypeSection()

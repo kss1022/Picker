@@ -5,11 +5,15 @@
 //  Created by 한현규 on 3/3/24.
 //
 
+import Foundation
+import Combine
 import ModernRIBs
+import CombineSchedulers
 import Permission
 import AlbumRepository
 import AlbumEntity
 import Selection
+
 
 
 public protocol GalleryRouting: ViewableRouting {
@@ -25,6 +29,8 @@ protocol GalleryPresentable: Presentable {
     func openSetting()
         
     func showAlbum(_ viewModel: PhotoGridViewModel)
+    func albumChanged(_ change: AlbumChange)
+    func limitedAlbumChanged()
     
     func showSelectionCount(_ count: Int)
 }
@@ -36,6 +42,7 @@ public protocol GalleryListener: AnyObject {
 protocol GalleryInteractorDependency{
     var permission: Permission{ get }
     var albumRepository: AlbumRepository{ get }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
 final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, GalleryInteractable, GalleryPresentableListener {
@@ -44,20 +51,26 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     weak var listener: GalleryListener?
 
     private let dependency: GalleryInteractorDependency
+    private var cancellablse: Set<AnyCancellable>
+
     private let permission : Permission
     private let albumRepository: AlbumRepository
+    private let mainQueue: AnySchedulerOf<DispatchQueue>
     
     private var showAlbum: Bool = false
         
     private var selection: Selection
+    
     
     init(
         presenter: GalleryPresentable,
         dependency: GalleryInteractorDependency
     ) {
         self.dependency = dependency
+        self.cancellablse = .init()
         self.permission = dependency.permission
         self.albumRepository = dependency.albumRepository
+        self.mainQueue = dependency.mainQueue
         self.selection = Selection()
         super.init(presenter: presenter)
         presenter.listener = self
@@ -70,10 +83,24 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
             await checkPermssion()
             await showPermissionState()
         }
+        
+        albumRepository.albumChanges
+            .receive(on: mainQueue)
+            .sink { change in
+                if self.permission.photoStatus() == .limited{
+                    self.presenter.limitedAlbumChanged()
+                    return
+                }
+                
+                self.presenter.albumChanged(change)
+            }
+            .store(in: &cancellablse)
     }
     
     override func willResignActive() {
         super.willResignActive()
+        cancellablse.forEach { $0.cancel() }
+        cancellablse.removeAll()
     }
     
     func checkPermssion() async{

@@ -15,7 +15,7 @@ struct PhotoGridViewModel: Equatable{
     private let album: Album
     private let selection: Selection
     
-    private var fetchResult: PHFetchResult<PHAsset>
+    public var fetchResult: PHFetchResult<PHAsset>
     
     
     public var name: String?{

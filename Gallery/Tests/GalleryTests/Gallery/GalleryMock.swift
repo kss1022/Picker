@@ -16,16 +16,19 @@ import ModernRIBs
 import RIBsTestSupports
 import UIKit
 import Combine
+import CombineSchedulers
 
 
 final class GalleryDependencyMock: GalleryInteractorDependency{
     
     var permission: Permission
     var albumRepository: AlbumRepository
+    var mainQueue: AnySchedulerOf<DispatchQueue>
     
     init() {
         self.permission = PermissionMock()
         self.albumRepository = AlbumRepositoryMock()
+        self.mainQueue = AnySchedulerOf<DispatchQueue>.immediate
     }
 }
 
@@ -68,6 +71,18 @@ final class GalleryPresentableMock: GalleryPresentable{
     func showSelectionCount(_ count: Int) {
         showSelectionCountCallCount += 1
         showSelectionCount = count
+    }
+    
+    var albumChangedCallCount = 0
+    var albumChangedChange: AlbumChange?
+    func albumChanged(_ change: AlbumChange) {
+        albumChangedCallCount += 1
+        albumChangedChange = change
+    }
+    
+    var limitedAlbumChangedCallCount = 0
+    func limitedAlbumChanged() {
+        limitedAlbumChangedCallCount += 1
     }
     
 }

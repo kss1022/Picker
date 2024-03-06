@@ -62,6 +62,7 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         button.setTitle("사진 접근 허용하기", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
+        button.addTarget(self,action: #selector(permissionButtonTap),for: .touchUpInside)
         return button
     }()
     
@@ -69,6 +70,7 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         let view = PermissionLimitedView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
+        view.requestPermoissionButton.addTarget(self,action: #selector(permissionButtonTap),for: .touchUpInside)
         return view
     }()
     
@@ -160,6 +162,14 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         titleView.setTitle(viewModel.name, for: .normal)
         navigationItem.titleView = titleView
         photoGridView.showPhotos(viewModel)
+    }
+    
+    func albumChanged(_ change: AlbumChange) {
+        photoGridView.albumChanged(change)
+    }
+    
+    func limitedAlbumChanged() {
+        photoGridView.limitedAlbumChanged()
     }
     
     func showSelectionCount(_ count: Int) {

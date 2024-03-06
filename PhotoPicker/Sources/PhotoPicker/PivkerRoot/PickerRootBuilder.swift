@@ -5,20 +5,23 @@
 //  Created by 한현규 on 3/4/24.
 //
 
+import Foundation
 import ModernRIBs
 import Gallery
 import Permission
 import AlbumRepository
+import CombineSchedulers
 
 protocol PickerRootDependency: Dependency{
     var permission: Permission{ get }
     var albumRepository: AlbumRepository{ get}
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
 final class PickerRootComponent: Component<PickerRootDependency>, GalleryDependency {
-
     var permission: Permission{ dependency.permission }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ dependency.mainQueue }
 }
 
 // MARK: - Builder
