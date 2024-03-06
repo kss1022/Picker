@@ -39,6 +39,16 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         return barButtonItem
     }()
     
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 0.0
+        return stackView
+    }()
+    
     
     private lazy var photoGridView: PhotoGridView = {
         let photoGridView = PhotoGridView()
@@ -79,24 +89,22 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBarButtonItem)
 
-        view.addSubview(photoGridView)
-        
+        view.addSubview(stackView)
         view.addSubview(permissionDeniedButton)
-        view.addSubview(permissionLimitedButton)
+        
+        
+        stackView.addArrangedSubview(permissionLimitedButton)
+        stackView.addArrangedSubview(photoGridView)
         
         
         NSLayoutConstraint.activate([
-            photoGridView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photoGridView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            photoGridView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            photoGridView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             permissionDeniedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             permissionDeniedButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            permissionLimitedButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            permissionLimitedButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            permissionLimitedButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
         
      

@@ -90,7 +90,13 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
             guard let album = albumRepository.albums.value.first else { return }
             await MainActor.run { presenter.showAlbum(PhotoGridViewModel(album, selection)) }
         case .limited:
-            await MainActor.run { presenter.showPermissionLimited() }
+            await albumRepository.fetch()
+            
+            await MainActor.run {
+                presenter.showPermissionLimited()
+                guard let album = albumRepository.albums.value.first else { return }
+                presenter.showAlbum(PhotoGridViewModel(album, selection))
+            }
         }
     }
         

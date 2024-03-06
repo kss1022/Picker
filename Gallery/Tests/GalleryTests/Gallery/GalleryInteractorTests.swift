@@ -82,11 +82,26 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.album)
     }
     
+    func testShowLimitedAlbum() async{
+        await sut.checkPermssion()
+        permission.photoStatusMock = .limited
+        
+        let album = Album()
+        albumRepository.albumsSubjects.send([album])
+        
+        await sut.showPermissionState()
+                
+        XCTAssertEqual([album], albumRepository.albums.value)
+        XCTAssertEqual(1, albumRepository.fetchCallCount)
+        XCTAssertEqual(1, presentable.showAlbumCallCount)
+        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.album)
+    }
+    
     func testShowSelectionCount(){
         sut.photoDidtap(Photo())
         sut.photoDidtap(Photo())
         
         XCTAssertEqual(2, presentable.showSelectionCountCallCount)
-        XCTAssertEqual("2", presentable.showSelectionCount)
+        XCTAssertEqual(2, presentable.showSelectionCount)
     }
 }
