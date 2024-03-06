@@ -65,7 +65,10 @@ public final class AlbumRepositoryImp: NSObject, AlbumRepository, PHPhotoLibrary
         
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        albumChangesSubject.send(AlbumChange(changeInstance))
+        Task{
+            await fetch()
+            albumChangesSubject.send(AlbumChange(changeInstance))
+        }
     }
     
 }

@@ -7,23 +7,37 @@
 
 @testable import Albums
 import XCTest
+import AlbumRepositoryTestSupport
+import AlbumEntity
 
 final class AlbumsInteractorTests: XCTestCase {
 
-    private var interactor: AlbumsInteractor!
-
-    // TODO: declare other objects and mocks you need as private vars
+    private var sut: AlbumsInteractor!
+    
+    private var presentable: AlbumsPresentableMock!
+    private var dependency: AlbumsDependencyMock!
+    
+    private var albumRepository: AlbumRepositoryMock!{
+        dependency.albumRepository as! AlbumRepositoryMock
+    }
 
     override func setUp() {
         super.setUp()
 
-        // TODO: instantiate objects and mocks
+        self.presentable = AlbumsPresentableMock()
+        self.dependency = AlbumsDependencyMock()
+        
+        self.sut = AlbumsInteractor(presenter: presentable,dependency: dependency)
     }
 
-    // MARK: - Tests
 
-    func test_exampleObservable_callsRouterOrListener_exampleProtocol() {
-        // This is an example of an interactor test case.
-        // Test your interactor binds observables and sends messages to router or listener.
+    func testShowAlbums() {
+        let albums = [Album()]
+        albumRepository.albumsSubject.send(albums)
+        
+        sut.didBecomeActive()
+        
+        XCTAssertEqual(1, presentable.showAlbumsCallCount)
+        XCTAssertEqual(albums.map(AlbumViewModel.init), presentable.showAlbumsAlbumViewModels)
     }
 }

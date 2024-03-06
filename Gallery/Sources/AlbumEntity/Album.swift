@@ -37,8 +37,8 @@ public struct Album: Equatable{
     }
     
     
-    public static func ==(lhs: Album, rhs: Album) -> Bool{
-        lhs.collection == rhs.collection
+    public static func ==(lhs: Album, rhs: Album) -> Bool{        
+        lhs.collection.localIdentifier == rhs.collection.localIdentifier
     }
 }
 

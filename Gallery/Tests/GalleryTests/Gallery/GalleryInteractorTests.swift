@@ -67,7 +67,7 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual(false, presentable.permissionLimitedIsHidden)
     }
             
-    func testShowAlbum() async{
+    func testShowPhotos() async{
         await sut.checkPermssion()
         permission.photoStatusMock = .authorized
         
@@ -78,11 +78,13 @@ final class GalleryInteractorTests: XCTestCase {
                 
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)
-        XCTAssertEqual(1, presentable.showAlbumCallCount)
-        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.album)
+        XCTAssertEqual(1, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.showPhotoGridPhotoGridViewModel)
+        XCTAssertEqual(1, presentable.showAlbumNameCallCount)        
+        XCTAssertEqual(album.name(), presentable.showAlbumNameAlbumName)
     }
     
-    func testShowLimitedAlbum() async{
+    func testShowLimitedPhotos() async{
         await sut.checkPermssion()
         permission.photoStatusMock = .limited
         
@@ -93,8 +95,16 @@ final class GalleryInteractorTests: XCTestCase {
                 
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)
-        XCTAssertEqual(1, presentable.showAlbumCallCount)
-        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.album)
+        XCTAssertEqual(1, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(PhotoGridViewModel(album, Selection()), presentable.showPhotoGridPhotoGridViewModel)
+        XCTAssertEqual(1, presentable.showAlbumNameCallCount)
+        XCTAssertEqual(album.name(), presentable.showAlbumNameAlbumName)
+    }
+    
+    func testAlbumsDidFinish(){
+        sut.albumsDidFinish(Album())
+        XCTAssertEqual(1, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(1, presentable.showAlbumNameCallCount)
     }
     
     func testShowSelectionCount(){
@@ -115,7 +125,7 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual(1, presentable.albumChangedCallCount)
     }
     
-    func testLimitedAlubmChanged(){
+    func testLimitedAlbumChanged(){
         permission.photoStatusMock = .limited
         
         sut.didBecomeActive()
@@ -124,4 +134,50 @@ final class GalleryInteractorTests: XCTestCase {
         albumRepository.albumChangesSubject.send(change)
         XCTAssertEqual(1, presentable.limitedAlbumChangedCallCount)
     }
+    
+    func testUpdateAlbumNameAlbumChanged(){
+        permission.photoStatusMock = .authorized
+        let album = Album()
+        albumRepository.albumsSubject.send([album])
+        
+        sut.didBecomeActive()
+        _ = XCTWaiter.wait(for: [XCTestExpectation(description: "didBecomeActive")], timeout: 0.1)
+
+        
+        let change = AlbumChange()
+        albumRepository.albumChangesSubject.send(change)
+                
+        XCTAssertEqual(1, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(2, presentable.showAlbumNameCallCount)
+    }
+    
+    func testUpdateAlbumNameAlbumDeleted(){
+        permission.photoStatusMock = .authorized
+        let mainAlbum = Album()
+        let secondAlbum = Album()
+        
+        albumRepository.albumsSubject.send([mainAlbum, secondAlbum])
+        
+        sut.didBecomeActive()
+        _ = XCTWaiter.wait(for: [XCTestExpectation(description: "didBecomeActive")], timeout: 0.1)
+        
+        //MainAlbum
+        XCTAssertEqual(1, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(1, presentable.showAlbumNameCallCount)
+        
+
+        //Set SecondAlbum
+        sut.albumsDidFinish(secondAlbum)
+        XCTAssertEqual(2, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(2, presentable.showAlbumNameCallCount)
+        
+        //Delete SecondAlbum
+        let change = AlbumChange()
+        albumRepository.albumsSubject.send([mainAlbum])
+        albumRepository.albumChangesSubject.send(change)
+                
+        XCTAssertEqual(3, presentable.showPhotoGridCallCount)
+        XCTAssertEqual(3, presentable.showAlbumNameCallCount)
+    }
+        
 }

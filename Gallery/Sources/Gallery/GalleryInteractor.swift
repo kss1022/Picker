@@ -28,7 +28,10 @@ protocol GalleryPresentable: Presentable {
     func showPermissionLimited()
     func openSetting()
         
-    func showAlbum(_ viewModel: PhotoGridViewModel)
+    //TODO: ShowAlbumName
+    func showPhotoGrid(_ viewModel: PhotoGridViewModel)
+    func showAlbumName(_ albumName: String?)
+    
     func albumChanged(_ change: AlbumChange)
     func limitedAlbumChanged()
     
@@ -56,11 +59,11 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     private let permission : Permission
     private let albumRepository: AlbumRepository
     private let mainQueue: AnySchedulerOf<DispatchQueue>
-    
-    private var showAlbum: Bool = false
         
     private var selection: Selection
     
+    private var album: Album?
+    private var showAlbums: Bool = false
     
     init(
         presenter: GalleryPresentable,
@@ -87,12 +90,8 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         albumRepository.albumChanges
             .receive(on: mainQueue)
             .sink { change in
-                if self.permission.photoStatus() == .limited{
-                    self.presenter.limitedAlbumChanged()
-                    return
-                }
-                
-                self.presenter.albumChanged(change)
+                self.permission.photoStatus() == .limited ? self.presenter.limitedAlbumChanged() : self.presenter.albumChanged(change)
+                self.checkAlbumChange()
             }
             .store(in: &cancellablse)
     }
@@ -115,23 +114,28 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         case .authorized:
             await albumRepository.fetch()
             guard let album = albumRepository.albums.value.first else { return }
-            await MainActor.run { presenter.showAlbum(PhotoGridViewModel(album, selection)) }
+            await MainActor.run { 
+                presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+                presenter.showAlbumName(album.name())
+            }
+            self.album = album
         case .limited:
             await albumRepository.fetch()
-            
             await MainActor.run {
                 presenter.showPermissionLimited()
                 guard let album = albumRepository.albums.value.first else { return }
-                presenter.showAlbum(PhotoGridViewModel(album, selection))
+                presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+                presenter.showAlbumName(album.name())
+                self.album = album
             }
         }
     }
         
     
     func titleViewDidTap() {
-        showAlbum.toggle()
+        showAlbums.toggle()
         
-        if showAlbum{
+        if showAlbums{
             router?.attachAlbums()
             return
         }
@@ -140,9 +144,11 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     }
     
     func albumsDidFinish(_ album: Album) {                
-        showAlbum = false
+        showAlbums = false
         router?.detachAlbums()
-        presenter.showAlbum(PhotoGridViewModel(album, selection))
+        presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+        presenter.showAlbumName(album.name())
+        self.album = album
     }
     
     func doneButtonDidTap() {
@@ -156,6 +162,35 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     func photoDidtap(_ photo: Photo) {
         selection.toogle(photo)
         presenter.showSelectionCount(selection.count)
+    }
+}
+
+
+extension GalleryInteractor{
+    func checkAlbumChange(){
+        guard let currentAlbum = self.album else { return }
+        let albums =  self.albumRepository.albums.value
+        
+        let album = changedAlbum()
+        setPhotosWhenAlbumDeleted()
+        presenter.showAlbumName(album.name())
+        self.album  = album
+        
+                
+        
+        func setPhotosWhenAlbumDeleted(){
+            if albums.contains(currentAlbum){
+                return
+            }
+            self.presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+        }
+        
+        func changedAlbum() -> Album{
+            if albums.contains(currentAlbum){
+                return albums.first(where: { $0 ==  self.album})!
+            }
+            return albums.first!
+        }
     }
 }
 

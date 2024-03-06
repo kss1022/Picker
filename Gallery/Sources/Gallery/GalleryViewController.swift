@@ -157,15 +157,18 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         URLSchemeManager.shared.openSetting()
     }
     
-    func showAlbum(_ viewModel: PhotoGridViewModel) {
-        navigationItem.titleView = nil
-        titleView.setTitle(viewModel.name, for: .normal)
-        navigationItem.titleView = titleView
+    func showPhotoGrid(_ viewModel: PhotoGridViewModel) {        
         photoGridView.showPhotos(viewModel)
+    }    
+    
+    func showAlbumName(_ albumName: String?) {
+        navigationItem.titleView = nil
+        titleView.setTitle(albumName, for: .normal)
+        navigationItem.titleView = titleView
     }
     
     func albumChanged(_ change: AlbumChange) {
-        photoGridView.albumChanged(change)
+        photoGridView.albumChanged(change)        
     }
     
     func limitedAlbumChanged() {

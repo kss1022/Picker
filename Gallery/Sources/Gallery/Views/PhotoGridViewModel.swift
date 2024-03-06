@@ -11,24 +11,17 @@ import Photos
 import Selection
 
 struct PhotoGridViewModel: Equatable{
-        
-    private let album: Album
+    
     private let selection: Selection
     
     public var fetchResult: PHFetchResult<PHAsset>
-    
-    
-    public var name: String?{
-        album.name()
-    }
     
     public var count: Int{
         assert(fetchResult.countOfAssets(with: .image) == fetchResult.count)
         return fetchResult.count
     }
         
-    init(_ album: Album, _ selection: Selection){
-        self.album = album
+    init(_ album: Album, _ selection: Selection){        
         self.selection = selection
         self.fetchResult = album.fetchAssets()
     }
@@ -47,8 +40,9 @@ struct PhotoGridViewModel: Equatable{
         selection.selectNum(photo(at))
     }
     
+    
     static func == (lhs: PhotoGridViewModel, rhs: PhotoGridViewModel) -> Bool {
-        lhs.album == rhs.album
+        rhs.fetchResult == rhs.fetchResult
     }
     
 }

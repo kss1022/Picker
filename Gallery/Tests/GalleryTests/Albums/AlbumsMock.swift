@@ -6,9 +6,40 @@
 //
 
 @testable import Albums
+import Foundation
 import ModernRIBs
 import Combine
 import RIBsTestSupports
+import AlbumRepository
+import AlbumRepositoryTestSupport
+import AlbumEntity
+import CombineSchedulers
+
+
+final class AlbumsDependencyMock: AlbumsInteractorDependency{
+    var albumRepository: AlbumRepository
+    var mainQueue: AnySchedulerOf<DispatchQueue>
+
+    
+    init() {
+        self.albumRepository = AlbumRepositoryMock()
+        self.mainQueue = AnySchedulerOf<DispatchQueue>.immediate
+    }
+    
+}
+
+final class AlbumsPresentableMock: AlbumsPresentable{
+
+    var listener: AlbumsPresentableListener?
+    
+    
+    var showAlbumsCallCount = 0
+    var showAlbumsAlbumViewModels: [AlbumViewModel]?
+    func showAlbums(_ viewModels: [AlbumViewModel]) {
+        showAlbumsCallCount += 1
+        showAlbumsAlbumViewModels = viewModels
+    }
+}
 
 final class ALbumsRoutingMock: ViewableRoutingMock, AlbumsRouting{
    

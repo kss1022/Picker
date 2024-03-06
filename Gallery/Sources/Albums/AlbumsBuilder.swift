@@ -5,15 +5,21 @@
 //  Created by 한현규 on 3/5/24.
 //
 
+import Foundation
 import ModernRIBs
 import AlbumRepository
+import CombineSchedulers
 
 public protocol AlbumsDependency: Dependency {
     var albumRepository: AlbumRepository{ get }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
+
 }
 
 final class AlbumsComponent: Component<AlbumsDependency>, AlbumsInteractorDependency {
     var albumRepository: AlbumRepository{ dependency.albumRepository }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{ dependency.mainQueue }
+
 }
 
 // MARK: - Builder

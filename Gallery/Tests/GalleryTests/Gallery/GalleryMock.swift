@@ -59,11 +59,18 @@ final class GalleryPresentableMock: GalleryPresentable{
     }
     
     
-    var showAlbumCallCount = 0
-    var album: PhotoGridViewModel?
-    func showAlbum(_ viewModel: PhotoGridViewModel) {
-        showAlbumCallCount += 1
-        album = viewModel
+    var showPhotoGridCallCount = 0
+    var showPhotoGridPhotoGridViewModel: PhotoGridViewModel?
+    func showPhotoGrid(_ viewModel: PhotoGridViewModel) {
+        showPhotoGridCallCount += 1
+        showPhotoGridPhotoGridViewModel = viewModel
+    }
+    
+    var showAlbumNameCallCount = 0
+    var showAlbumNameAlbumName: String?
+    func showAlbumName(_ albumName: String?) {
+        showAlbumNameCallCount += 1
+        showAlbumNameAlbumName = albumName
     }
     
     var showSelectionCountCallCount = 0
