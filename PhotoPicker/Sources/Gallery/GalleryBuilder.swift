@@ -8,18 +8,21 @@
 import Foundation
 import ModernRIBs
 import Permission
+import Selection
 import AlbumRepository
 import Albums
 import CombineSchedulers
 
 public protocol GalleryDependency: Dependency {
     var permission: Permission{ get }
+    var selection: Selection{ get }
     var albumRepository: AlbumRepository{ get }
     var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
 final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency , AlbumsDependency{
     var permission: Permission{ dependency.permission }
+    var selection: Selection{ dependency.selection }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
     var mainQueue: AnySchedulerOf<DispatchQueue>{ dependency.mainQueue }
 }

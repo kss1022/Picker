@@ -44,6 +44,7 @@ public protocol GalleryListener: AnyObject {
 
 protocol GalleryInteractorDependency{
     var permission: Permission{ get }
+    var selection: Selection{ get }
     var albumRepository: AlbumRepository{ get }
     var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
@@ -57,10 +58,10 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     private var cancellablse: Set<AnyCancellable>
 
     private let permission : Permission
+    private let selection: Selection
     private let albumRepository: AlbumRepository
     private let mainQueue: AnySchedulerOf<DispatchQueue>
         
-    private var selection: Selection
     
     private var album: Album?
     private var showAlbums: Bool = false
@@ -72,9 +73,9 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         self.dependency = dependency
         self.cancellablse = .init()
         self.permission = dependency.permission
+        self.selection = dependency.selection
         self.albumRepository = dependency.albumRepository
-        self.mainQueue = dependency.mainQueue
-        self.selection = Selection()
+        self.mainQueue = dependency.mainQueue        
         super.init(presenter: presenter)
         presenter.listener = self
     }

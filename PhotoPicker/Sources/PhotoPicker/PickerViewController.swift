@@ -8,10 +8,16 @@
 import UIKit
 import ModernRIBs
 
+protocol PickerHandler{
+    func setLimnit(_ limit: Int)
+}
+
 
 public final class PickerViewController: UIViewController{
     
     private var routing: ViewableRouting?
+    private var pickerHandler: PickerHandler?
+
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -27,9 +33,12 @@ public final class PickerViewController: UIViewController{
     
     private func attachRoot(){
         let builder = PickerRootBuilder(dependency: PickerComponent())
-        routing = builder.build(self)
+        let result = builder.build(self)
+        routing = result.router
         routing?.interactable.activate()
         routing?.load()
+        
+        pickerHandler = result.handler
     }
     
     private func setView(){
@@ -39,6 +48,9 @@ public final class PickerViewController: UIViewController{
         vc.view.frame = view.bounds
     }
 
+    public func setLimit(_ limit: Int){
+        pickerHandler?.setLimnit(limit)
+    }
 }
 
 

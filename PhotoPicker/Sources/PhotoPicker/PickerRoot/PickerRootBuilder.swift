@@ -9,17 +9,20 @@ import Foundation
 import ModernRIBs
 import Gallery
 import Permission
+import Selection
 import AlbumRepository
 import CombineSchedulers
 
 protocol PickerRootDependency: Dependency{
     var permission: Permission{ get }
+    var selection: Selection{ get }
     var albumRepository: AlbumRepository{ get}
     var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
-final class PickerRootComponent: Component<PickerRootDependency>, GalleryDependency {
+final class PickerRootComponent: Component<PickerRootDependency>, PickerRootInteractorDependency, GalleryDependency  {    
     var permission: Permission{ dependency.permission }
+    var selection: Selection{ dependency.selection }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
     var mainQueue: AnySchedulerOf<DispatchQueue>{ dependency.mainQueue }
 }
@@ -27,7 +30,7 @@ final class PickerRootComponent: Component<PickerRootDependency>, GalleryDepende
 // MARK: - Builder
 
 protocol PickerRootBuildable: Buildable {
-    func build(_ listener: PickerRootListener) -> LaunchRouting
+    func build(_ listener: PickerRootListener) -> (router: LaunchRouting, handler: PickerHandler)
 }
 
 final class PickerRootBuilder: Builder<PickerRootDependency>, PickerRootBuildable {
@@ -36,17 +39,20 @@ final class PickerRootBuilder: Builder<PickerRootDependency>, PickerRootBuildabl
         super.init(dependency: dependency)
     }
 
-    func build(_ listener: PickerRootListener) -> LaunchRouting {
+    func build(_ listener: PickerRootListener) -> (router: LaunchRouting, handler: PickerHandler) {
         let component = PickerRootComponent(dependency: dependency)
         let viewController = PickerRootViewController()
-        let interactor = PickerRootInteractor(presenter: viewController)
+        let interactor = PickerRootInteractor(presenter: viewController, dependency: component)
         interactor.listener = listener
         let galleryBuilder = GalleryBuilder(dependency: component)
         
-        return PickerRootRouter(
+        
+        let router = PickerRootRouter(
             interactor: interactor,
             viewController: viewController,
             galleryBuildable: galleryBuilder
         )
+        
+        return (router, interactor)
     }
 }

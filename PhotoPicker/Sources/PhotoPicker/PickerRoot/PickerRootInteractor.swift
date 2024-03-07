@@ -6,6 +6,7 @@
 //
 
 import ModernRIBs
+import Selection
 
 protocol PickerRootRouting: ViewableRouting {
     func attachGallery()
@@ -19,12 +20,24 @@ protocol PickerRootListener: AnyObject {
     func pickerDidFinish()
 }
 
-final class PickerRootInteractor: PresentableInteractor<PickerRootPresentable>, PickerRootInteractable, PickerRootPresentableListener {
+protocol PickerRootInteractorDependency{
+    var selection: Selection{ get }
+}
 
+final class PickerRootInteractor: PresentableInteractor<PickerRootPresentable>, PickerRootInteractable, PickerRootPresentableListener {
+    
     weak var router: PickerRootRouting?
     weak var listener: PickerRootListener?
+    
+    private let dependency: PickerRootInteractorDependency
+    private let selection: Selection
 
-    override init(presenter: PickerRootPresentable) {
+    init(
+        presenter: PickerRootPresentable,
+        dependency: PickerRootInteractorDependency
+    ) {
+        self.dependency = dependency
+        self.selection = dependency.selection
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -42,5 +55,13 @@ final class PickerRootInteractor: PresentableInteractor<PickerRootPresentable>, 
     // MARK: Gallery
     func galleryDidFinish() {
         listener?.pickerDidFinish()
+    }
+
+}
+
+
+extension PickerRootInteractor: PickerHandler{
+    func setLimnit(_ limit: Int) {        
+        selection.setLimit(limit)
     }
 }

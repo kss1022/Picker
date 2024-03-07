@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     @objc
     private func addBarButtonItemTap(){
         let picker = PickerViewController()
+        picker.setLimit(5)
         present(picker, animated: true)
     }
 }
