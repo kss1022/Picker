@@ -22,11 +22,13 @@ import CombineSchedulers
 final class GalleryDependencyMock: GalleryInteractorDependency{
     
     var permission: Permission
+    var selection: Selection
     var albumRepository: AlbumRepository
     var mainQueue: AnySchedulerOf<DispatchQueue>
     
     init() {
         self.permission = PermissionMock()
+        self.selection = Selection()
         self.albumRepository = AlbumRepositoryMock()
         self.mainQueue = AnySchedulerOf<DispatchQueue>.immediate
     }

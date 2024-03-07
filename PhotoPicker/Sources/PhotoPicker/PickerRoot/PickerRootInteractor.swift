@@ -6,6 +6,7 @@
 //
 
 import ModernRIBs
+import AlbumEntity
 import Selection
 
 protocol PickerRootRouting: ViewableRouting {
@@ -17,7 +18,7 @@ protocol PickerRootPresentable: Presentable {
 }
 
 protocol PickerRootListener: AnyObject {
-    func pickerDidFinish()
+    func pickerDidFinish(_ photos: [Photo])
 }
 
 protocol PickerRootInteractorDependency{
@@ -53,8 +54,8 @@ final class PickerRootInteractor: PresentableInteractor<PickerRootPresentable>, 
     
     
     // MARK: Gallery
-    func galleryDidFinish() {
-        listener?.pickerDidFinish()
+    func galleryDidFinish(_ photos: [Photo]) {
+        listener?.pickerDidFinish(photos)
     }
 
 }

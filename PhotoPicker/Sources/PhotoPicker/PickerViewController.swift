@@ -7,17 +7,23 @@
 
 import UIKit
 import ModernRIBs
+import AlbumEntity
 
 protocol PickerHandler{
     func setLimnit(_ limit: Int)
 }
 
+public protocol PickerViewControllerDelegate: AnyObject{
+    func picker(_ picker: PickerViewController, didFinishPicking results: [PickerResult])
+}
 
 public final class PickerViewController: UIViewController{
     
     private var routing: ViewableRouting?
     private var pickerHandler: PickerHandler?
 
+    
+    public weak var delegate: PickerViewControllerDelegate?
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -55,7 +61,7 @@ public final class PickerViewController: UIViewController{
 
 
 extension PickerViewController: PickerRootListener{
-    func pickerDidFinish() {
-        self.dismiss(animated: true)
+    func pickerDidFinish(_ photo: [Photo]) {
+        delegate?.picker(self, didFinishPicking: photo.map(PickerResult.init))
     }
 }

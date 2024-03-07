@@ -75,6 +75,10 @@ public final class Selection{
         selectedItems.isEmpty
     }
     
+    public func photos() -> [Photo]{
+        selectedItems
+    }
+    
     public subscript(position: Int) -> Photo{
         selectedItems[position]
     }

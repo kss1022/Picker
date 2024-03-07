@@ -11,6 +11,9 @@
 		876DB9522B99B913002C3411 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 876DB9512B99B913002C3411 /* ModernRIBs */; };
 		876DB9542B99B913002C3411 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = 876DB9532B99B913002C3411 /* CombineExt */; };
 		876DB9562B99B913002C3411 /* CombineSchedulers in Frameworks */ = {isa = PBXBuildFile; productRef = 876DB9552B99B913002C3411 /* CombineSchedulers */; };
+		876DB9592B99CD07002C3411 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876DB9582B99CD07002C3411 /* GridView.swift */; };
+		876DB95B2B99CD15002C3411 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876DB95A2B99CD15002C3411 /* GridCell.swift */; };
+		87C12ECA2B99CD8000A29BD0 /* UIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 87C12EC92B99CD8000A29BD0 /* UIUtils */; };
 		87C786A52B91CB8F00B36D52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A42B91CB8F00B36D52 /* AppDelegate.swift */; };
 		87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */; };
 		87C786A92B91CB8F00B36D52 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A82B91CB8F00B36D52 /* ViewController.swift */; };
@@ -21,6 +24,8 @@
 
 /* Begin PBXFileReference section */
 		870299FF2B95C951000538EE /* PhotoPicker */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PhotoPicker; sourceTree = "<group>"; };
+		876DB9582B99CD07002C3411 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		876DB95A2B99CD15002C3411 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
 		8775115B2B947F6900EE2652 /* Platform */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Platform; path = ../Platform; sourceTree = "<group>"; };
 		87C786A12B91CB8F00B36D52 /* Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Picker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C786A42B91CB8F00B36D52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87C12ECA2B99CD8000A29BD0 /* UIUtils in Frameworks */,
 				876DB9562B99B913002C3411 /* CombineSchedulers in Frameworks */,
 				87669E052B99B8BC00A12B7A /* PhotoPicker in Frameworks */,
 				876DB9542B99B913002C3411 /* CombineExt in Frameworks */,
@@ -52,6 +58,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		876DB9572B99CD00002C3411 /* GridView */ = {
+			isa = PBXGroup;
+			children = (
+				876DB9582B99CD07002C3411 /* GridView.swift */,
+				876DB95A2B99CD15002C3411 /* GridCell.swift */,
+			);
+			path = GridView;
 			sourceTree = "<group>";
 		};
 		87C786982B91CB8F00B36D52 = {
@@ -76,6 +91,7 @@
 		87C786A32B91CB8F00B36D52 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				876DB9572B99CD00002C3411 /* GridView */,
 				87C786A42B91CB8F00B36D52 /* AppDelegate.swift */,
 				87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */,
 				87C786A82B91CB8F00B36D52 /* ViewController.swift */,
@@ -108,6 +124,7 @@
 				876DB9512B99B913002C3411 /* ModernRIBs */,
 				876DB9532B99B913002C3411 /* CombineExt */,
 				876DB9552B99B913002C3411 /* CombineSchedulers */,
+				87C12EC92B99CD8000A29BD0 /* UIUtils */,
 			);
 			productName = Picker;
 			productReference = 87C786A12B91CB8F00B36D52 /* Picker.app */;
@@ -171,7 +188,9 @@
 			files = (
 				87C786A92B91CB8F00B36D52 /* ViewController.swift in Sources */,
 				87C786A52B91CB8F00B36D52 /* AppDelegate.swift in Sources */,
+				876DB9592B99CD07002C3411 /* GridView.swift in Sources */,
 				87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */,
+				876DB95B2B99CD15002C3411 /* GridCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +470,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 87994FB42B98585B00CD4EAC /* XCRemoteSwiftPackageReference "combine-schedulers" */;
 			productName = CombineSchedulers;
+		};
+		87C12EC92B99CD8000A29BD0 /* UIUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIUtils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

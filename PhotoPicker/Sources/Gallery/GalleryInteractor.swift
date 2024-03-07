@@ -39,7 +39,7 @@ protocol GalleryPresentable: Presentable {
 }
 
 public protocol GalleryListener: AnyObject {
-    func galleryDidFinish()
+    func galleryDidFinish(_ photos: [Photo])
 }
 
 protocol GalleryInteractorDependency{
@@ -153,7 +153,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     }
     
     func doneButtonDidTap() {
-        listener?.galleryDidFinish()
+        listener?.galleryDidFinish(selection.photos())
     }
     
     func permissionButtonDidTap() {
