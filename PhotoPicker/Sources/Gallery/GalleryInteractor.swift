@@ -33,7 +33,7 @@ protocol GalleryPresentable: Presentable {
     func showAlbumName(_ albumName: String?)
     
     func albumChanged(_ change: AlbumChange)
-    func limitedAlbumChanged()
+    func limitedAlbumChanged(_ change: AlbumChange)
     
     func showSelectionCount(_ count: Int)
 }
@@ -90,7 +90,7 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         albumRepository.albumChanges
             .receive(on: mainQueue)
             .sink { change in
-                self.permission.photoStatus() == .limited ? self.presenter.limitedAlbumChanged() : self.presenter.albumChanged(change)
+                self.permission.photoStatus() == .limited ? self.presenter.limitedAlbumChanged(change) : self.presenter.albumChanged(change)
                 self.checkAlbumChange()
             }
             .store(in: &cancellablse)

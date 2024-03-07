@@ -123,6 +123,7 @@ final class GalleryInteractorTests: XCTestCase {
         let change = AlbumChange()
         albumRepository.albumChangesSubject.send(change)
         XCTAssertEqual(1, presentable.albumChangedCallCount)
+        XCTAssertEqual(change, presentable.albumChangedChange)
     }
     
     func testLimitedAlbumChanged(){
@@ -133,6 +134,7 @@ final class GalleryInteractorTests: XCTestCase {
         let change = AlbumChange()
         albumRepository.albumChangesSubject.send(change)
         XCTAssertEqual(1, presentable.limitedAlbumChangedCallCount)
+        XCTAssertEqual(change, presentable.limitedAlbumChangedChange)
     }
     
     func testUpdateAlbumNameAlbumChanged(){

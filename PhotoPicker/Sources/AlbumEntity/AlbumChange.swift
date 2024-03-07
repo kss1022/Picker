@@ -10,7 +10,7 @@ import Photos
 import UIKit
 
 
-public struct AlbumChange{
+public struct AlbumChange: Equatable{
     public let change: PHChange
     
     public init(_ change: PHChange) {

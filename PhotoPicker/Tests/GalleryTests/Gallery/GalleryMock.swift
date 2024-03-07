@@ -88,8 +88,10 @@ final class GalleryPresentableMock: GalleryPresentable{
     }
     
     var limitedAlbumChangedCallCount = 0
-    func limitedAlbumChanged() {
+    var limitedAlbumChangedChange: AlbumChange?
+    func limitedAlbumChanged(_ change: AlbumChange) {
         limitedAlbumChangedCallCount += 1
+        limitedAlbumChangedChange = change
     }
     
 }

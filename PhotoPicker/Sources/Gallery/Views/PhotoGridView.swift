@@ -93,7 +93,10 @@ final class PhotoGridView: UIView{
         }
     }
     
-    func limitedAlbumChanged(){
+    func limitedAlbumChanged(_ change: AlbumChange){
+        guard let fetchResult = viewModel?.fetchResult,
+              let changeDetails = change.changeDetails(fetchResult) else { return }                                
+        viewModel?.fetchResult = changeDetails.fetchResult()
         collectionView.reloadData()
     }
     

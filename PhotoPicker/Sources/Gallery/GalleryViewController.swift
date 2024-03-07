@@ -171,8 +171,8 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         photoGridView.albumChanged(change)        
     }
     
-    func limitedAlbumChanged() {
-        photoGridView.limitedAlbumChanged()
+    func limitedAlbumChanged(_ change: AlbumChange) {
+        photoGridView.limitedAlbumChanged(change)
     }
     
     func showSelectionCount(_ count: Int) {
