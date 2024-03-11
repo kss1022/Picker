@@ -7,9 +7,9 @@
 
 import Foundation
 import Photos
+import UIKit
 
-
-public struct Photo: Equatable{
+public struct Photo: Equatable, Image{
     
     public let asset: PHAsset
     
@@ -19,6 +19,22 @@ public struct Photo: Equatable{
     
     public init(){
         self.asset = PHAssetMock()
+    }
+    
+    public func loadImage(_ options: PHImageRequestOptions, _ completionHandler: @escaping (UIImage?) -> Void) {
+        
+        PHImageManager.default().requestImage(
+            for: asset,
+            targetSize: PHImageManagerMaximumSize,
+            contentMode: .default,
+            options: options
+        ){ image, _ in
+            completionHandler(image)
+        }
+    }
+        
+    public static func ==(lhs: Photo, rhs: Photo) -> Bool{
+        lhs.asset.localIdentifier == rhs.asset.localIdentifier
     }
 }
 

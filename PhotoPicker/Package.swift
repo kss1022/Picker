@@ -45,6 +45,10 @@ let package = Package(
         .library(
             name: "AlbumRepositoryTestSupport",
             targets: ["AlbumRepositoryTestSupport"]
+        ),
+        .library(
+            name: "PhotoEditor",
+            targets: ["PhotoEditor"]
         )
     ],
     dependencies: [
@@ -65,12 +69,14 @@ let package = Package(
             name: "Gallery",
             dependencies: [
                 .product(name: "UIUtils", package: "Platform"),
+                .product(name: "RIBsUtils", package: "Platform"),
                 "ModernRIBs",
                 "GalleryUtils",
                 "Permission",
                 "Selection",
                 "AlbumRepository",
-                "Albums"
+                "Albums",
+                "PhotoEditor"
             ]
         ),
         .target(
@@ -119,11 +125,22 @@ let package = Package(
                 "AlbumRepository"
             ]
         ),
+        .target(
+            name: "PhotoEditor",
+            dependencies: [
+                "ModernRIBs",
+                "AlbumEntity",
+                "GalleryUtils",
+                .product(name: "UIUtils", package: "Platform"),
+                .product(name: "RIBsUtils", package: "Platform"),
+            ]
+        ),
         .testTarget(
             name: "GalleryTests",
             dependencies: [
                 "Gallery",
                 "Albums",
+                "PhotoEditor",
                 "PermissionTestSupport",
                 "AlbumRepositoryTestSupport",
                 .product(name: "RIBsTestSupports", package: "Platform")

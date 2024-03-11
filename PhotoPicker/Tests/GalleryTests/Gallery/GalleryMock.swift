@@ -120,6 +120,20 @@ final class GalleryInteractorMock: GalleryInteractable{
         albumsDidFinishAlbum = album
     }
     
+    
+    var photoEditorDidFinishImages: [Image]?
+    var photoEditorDidFinishCallCount = 0
+    func photoEditorDidFinish(_ images: [Image]) {
+        photoEditorDidFinishCallCount += 1
+        photoEditorDidFinishImages = images
+    }
+    
+    var photoEditorDidMoveCallCount = 0
+    func photoEditorDidMove() {
+        photoEditorDidMoveCallCount += 1
+    }
+    
+    
     var isActive: Bool { isActiveSubject.value }
     var isActiveStream: AnyPublisher<Bool, Never> { isActiveSubject.eraseToAnyPublisher() }
     private let isActiveSubject = CurrentValueSubject<Bool, Never>(false)

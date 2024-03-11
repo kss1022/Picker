@@ -52,6 +52,7 @@ public final class PickerViewController: UIViewController{
         let vc = router.viewControllable.uiviewController
         view.addSubview(vc.view)
         vc.view.frame = view.bounds
+        addChild(vc)
     }
 
     public func setLimit(_ limit: Int){
@@ -61,7 +62,7 @@ public final class PickerViewController: UIViewController{
 
 
 extension PickerViewController: PickerRootListener{
-    func pickerDidFinish(_ photo: [Photo]) {
-        delegate?.picker(self, didFinishPicking: photo.map(PickerResult.init))
+    func pickerDidFinish(_ images: [Image]) {
+        delegate?.picker(self, didFinishPicking: images.map(PickerResult.init))
     }
 }

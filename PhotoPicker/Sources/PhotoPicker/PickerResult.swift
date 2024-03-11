@@ -11,29 +11,15 @@ import Photos
 import UIKit
 
 public struct PickerResult{
-    var photo: Photo
+    var image: Image
     
-    private static let options: PHImageRequestOptions = {
-        let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        options.deliveryMode = .highQualityFormat
-        options.resizeMode = .none
-        options.isSynchronous = true
-        return options
-    }()
-    
-    init(_ photo: Photo) {
-        self.photo = photo
+    init(_ image: Image) {
+        self.image = image
     }
     
     public func loadImage(_ completionHandler: @escaping (UIImage?) -> Void){
-        PHImageManager.default().requestImage(
-            for: photo.asset,
-            targetSize: PHImageManagerMaximumSize,
-            contentMode: .default,
-            options: PickerResult.options
-        ){ image, _ in
-            completionHandler(image)
+        ImageLoader.shared.loadImage(image) {
+            completionHandler($0)
         }
     }
     
@@ -87,7 +73,9 @@ public struct PickerResult{
 
     
     public func canLoadImage() -> Bool{
-        PHAsset.fetchAssets(withLocalIdentifiers: [photo.asset.localIdentifier], options: .none).firstObject != nil
+        //TODO: check fetch Assets
+        //PHAsset.fetchAssets(withLocalIdentifiers: [image.asset.localIdentifier], options: .none).firstObject != nil        
+        true
     }
     
 }

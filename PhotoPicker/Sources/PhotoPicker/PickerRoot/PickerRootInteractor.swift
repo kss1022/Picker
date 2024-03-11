@@ -18,7 +18,7 @@ protocol PickerRootPresentable: Presentable {
 }
 
 protocol PickerRootListener: AnyObject {
-    func pickerDidFinish(_ photos: [Photo])
+    func pickerDidFinish(_ images: [Image])
 }
 
 protocol PickerRootInteractorDependency{
@@ -54,8 +54,8 @@ final class PickerRootInteractor: PresentableInteractor<PickerRootPresentable>, 
     
     
     // MARK: Gallery
-    func galleryDidFinish(_ photos: [Photo]) {
-        listener?.pickerDidFinish(photos)
+    func galleryDidFinish(_ images: [Image]) {
+        listener?.pickerDidFinish(images)
     }
 
 }

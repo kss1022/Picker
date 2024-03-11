@@ -20,7 +20,7 @@ final class GalleryInteractorTests: XCTestCase {
     private var sut: GalleryInteractor!
     
     private var presentable: GalleryPresentableMock!
-    private var dependecny: GalleryInteractorDependency!
+    private var dependecny: GalleryDependencyMock!
     
     private var permission: PermissionMock!{
         dependecny.permission as! PermissionMock

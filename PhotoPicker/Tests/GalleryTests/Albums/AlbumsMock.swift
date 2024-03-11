@@ -48,10 +48,10 @@ final class ALbumsRoutingMock: ViewableRoutingMock, AlbumsRouting{
 
 final class AlbumsBuildableMock: AlbumsBuildable{
     
-    var buildHandler: ( (_ listener: AlbumsListener) -> AlbumsRouting)?
+    var buildHandler: ( (_ listener: AlbumsListener) -> ViewableRouting)?
         
     var buildCallCount = 0
-    func build(withListener listener: AlbumsListener) -> AlbumsRouting {
+    func build(withListener listener: AlbumsListener) -> ViewableRouting {
         buildCallCount += 1
         
         if let buildHandler = buildHandler{

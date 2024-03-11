@@ -8,6 +8,7 @@
 @testable import Gallery
 import XCTest
 import Albums
+import PhotoEditor
 import ModernRIBs
 import RIBsTestSupports
 
@@ -18,6 +19,7 @@ final class GalleryRouterTests: XCTestCase {
     private var interactor: GalleryInteractable!
     private var viewController: GalleryViewControllableMock!
     private var albumBuildable: AlbumsBuildableMock!
+    private var photoBuildable: PhotoEditorBuildableMock!
     
 
     override func setUp() {
@@ -26,11 +28,13 @@ final class GalleryRouterTests: XCTestCase {
         self.interactor = GalleryInteractorMock()
         self.viewController = GalleryViewControllableMock()
         self.albumBuildable = AlbumsBuildableMock()
+        self.photoBuildable = PhotoEditorBuildableMock()
 
         self.sut = GalleryRouter(
             interactor: interactor,
             viewController: viewController,
-            albumsBuildable: albumBuildable
+            albumsBuildable: albumBuildable, 
+            photoEditorBuildable: photoBuildable
         )
     }
 

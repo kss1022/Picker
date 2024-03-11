@@ -18,8 +18,8 @@
 		87C786A72B91CB8F00B36D52 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A62B91CB8F00B36D52 /* SceneDelegate.swift */; };
 		87C786A92B91CB8F00B36D52 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C786A82B91CB8F00B36D52 /* ViewController.swift */; };
 		87C786AC2B91CB8F00B36D52 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87C786AA2B91CB8F00B36D52 /* Main.storyboard */; };
-		87C786AE2B91CB9100B36D52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87C786AD2B91CB9100B36D52 /* Assets.xcassets */; };
 		87C786B12B91CB9100B36D52 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87C786AF2B91CB9100B36D52 /* LaunchScreen.storyboard */; };
+		87EC59B82B9F3AE400271361 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87C786AD2B91CB9100B36D52 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,7 +137,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					87C786A02B91CB8F00B36D52 = {
@@ -174,7 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87C786B12B91CB9100B36D52 /* LaunchScreen.storyboard in Resources */,
-				87C786AE2B91CB9100B36D52 /* Assets.xcassets in Resources */,
+				87EC59B82B9F3AE400271361 /* Assets.xcassets in Resources */,
 				87C786AC2B91CB8F00B36D52 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,9 +6,12 @@
 //
 
 import ModernRIBs
+import RIBsUtils
 import Albums
+import AlbumEntity
+import PhotoEditor
 
-protocol GalleryInteractable: Interactable, AlbumsListener {
+protocol GalleryInteractable: Interactable, AlbumsListener, PhotoEditorListener {
     var router: GalleryRouting? { get set }
     var listener: GalleryListener? { get set }
 }
@@ -23,12 +26,17 @@ final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewContro
     private let albumsBuildable: AlbumsBuildable
     private var albumRouter: ViewableRouting?
     
+    private let photoEditorBuildable: PhotoEditorBuildable
+    private var photoEditorRouter: ViewableRouting?
+    
     init(
         interactor: GalleryInteractable,
         viewController: GalleryViewControllable,
-        albumsBuildable: AlbumsBuildable
+        albumsBuildable: AlbumsBuildable,
+        photoEditorBuildable: PhotoEditorBuildable
     ) {
         self.albumsBuildable = albumsBuildable
+        self.photoEditorBuildable = photoEditorBuildable
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
     }
@@ -54,5 +62,27 @@ final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewContro
         detachChild(router)
         albumRouter = nil
     }
+    
+    func attachPhtoEditor(_ photos: [Photo]) {
+        if photoEditorRouter != nil{
+            return
+        }
+        
+        let router = photoEditorBuildable.build(withListener: interactor, photos: photos)
+        viewController.pushViewController(router.viewControllable, animated: true)
+        photoEditorRouter = router
+        attachChild(router)
+    }
+    
+    func detachPhotoEditor() {
+        guard let router = photoEditorRouter else{
+            return
+        }
+        
+        viewController.popViewController(animated: true)
+        detachChild(router)
+        photoEditorRouter = nil
+    }
+    
     
 }

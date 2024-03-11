@@ -13,6 +13,7 @@ import AlbumEntity
 protocol GalleryPresentableListener: AnyObject {    
     func titleViewDidTap()
     func doneButtonDidTap()
+    func editButtonDidTap()
     func permissionButtonDidTap()
     func photoDidtap(_ photo: Photo)
 }
@@ -36,6 +37,18 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(doneBarButtonItemTap))
         barButtonItem.addGestureRecognizer(tapGesture)
                 
+        return barButtonItem
+    }()
+    
+    
+    private lazy var photoEditBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "wand.and.rays"),
+            style: .plain,
+            target: self,
+            action: #selector(photoEditBarButtonTap)
+        )
+        barButtonItem.tintColor = .label
         return barButtonItem
     }()
     
@@ -90,6 +103,9 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         view.backgroundColor = .systemBackground
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBarButtonItem)
+        
+        toolbarItems =  [photoEditBarButtonItem]
+        
 
         view.addSubview(stackView)
         view.addSubview(permissionDeniedButton)
@@ -110,6 +126,14 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         ])
         
      
+    }
+    
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+        
+        if parent is UINavigationController{
+            navigationController?.isToolbarHidden = false
+        }
     }
     
     //MARK: ViewControllerable
@@ -187,6 +211,11 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     @objc
     private func doneBarButtonItemTap(){
         listener?.doneButtonDidTap()
+    }
+    
+    @objc
+    private func photoEditBarButtonTap(){
+        listener?.editButtonDidTap()
     }
     
     @objc

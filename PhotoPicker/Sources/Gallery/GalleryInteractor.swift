@@ -19,6 +19,9 @@ import Selection
 public protocol GalleryRouting: ViewableRouting {
     func attachAlbums()
     func detachAlbums()
+    
+    func attachPhtoEditor(_ photos: [Photo])
+    func detachPhotoEditor()
 }
 
 protocol GalleryPresentable: Presentable {
@@ -39,7 +42,7 @@ protocol GalleryPresentable: Presentable {
 }
 
 public protocol GalleryListener: AnyObject {
-    func galleryDidFinish(_ photos: [Photo])
+    func galleryDidFinish(_ images: [Image])
 }
 
 protocol GalleryInteractorDependency{
@@ -154,6 +157,19 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     
     func doneButtonDidTap() {
         listener?.galleryDidFinish(selection.photos())
+    }
+    
+    func editButtonDidTap() {
+        router?.attachPhtoEditor(selection.photos())
+    }
+    
+    func photoEditorDidMove() {
+        router?.detachPhotoEditor()
+    }
+    
+    func photoEditorDidFinish(_ images: [Image]) {
+        router?.detachPhotoEditor()
+        listener?.galleryDidFinish(images)
     }
     
     func permissionButtonDidTap() {

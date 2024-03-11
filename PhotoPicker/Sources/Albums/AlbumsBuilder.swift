@@ -25,7 +25,7 @@ final class AlbumsComponent: Component<AlbumsDependency>, AlbumsInteractorDepend
 // MARK: - Builder
 
 public protocol AlbumsBuildable: Buildable {
-    func build(withListener listener: AlbumsListener) -> AlbumsRouting
+    func build(withListener listener: AlbumsListener) -> ViewableRouting
 }
 
 public final class AlbumsBuilder: Builder<AlbumsDependency>, AlbumsBuildable {
@@ -34,7 +34,7 @@ public final class AlbumsBuilder: Builder<AlbumsDependency>, AlbumsBuildable {
         super.init(dependency: dependency)
     }
 
-    public func build(withListener listener: AlbumsListener) -> AlbumsRouting {
+    public func build(withListener listener: AlbumsListener) -> ViewableRouting {
         let component = AlbumsComponent(dependency: dependency)
         let viewController = AlbumsViewController()
         let interactor = AlbumsInteractor(presenter: viewController, dependency: component)
