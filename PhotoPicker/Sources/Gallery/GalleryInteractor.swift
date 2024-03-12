@@ -20,8 +20,11 @@ public protocol GalleryRouting: ViewableRouting {
     func attachAlbums()
     func detachAlbums()
     
-    func attachPhtoEditor(_ photos: [Photo])
+    func attachPhtoEditor(_ images: [Image])
     func detachPhotoEditor()
+    
+    func attachCamera()
+    func detachCamera()
 }
 
 protocol GalleryPresentable: Presentable {
@@ -30,6 +33,8 @@ protocol GalleryPresentable: Presentable {
     func showPermissionDenied()
     func showPermissionLimited()
     func openSetting()
+    
+    func showCameraPermissionDenied()
         
     //TODO: ShowAlbumName
     func showPhotoGrid(_ viewModel: PhotoGridViewModel)
@@ -43,6 +48,7 @@ protocol GalleryPresentable: Presentable {
 
 public protocol GalleryListener: AnyObject {
     func galleryDidFinish(_ images: [Image])
+    func galleryDidCancel()
 }
 
 protocol GalleryInteractorDependency{
@@ -87,8 +93,8 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         super.didBecomeActive()
         
         Task{
-            await checkPermssion()
-            await showPermissionState()
+            await checkPhotoPermssion()
+            await showPhotoPermissionState()
         }
         
         albumRepository.albumChanges
@@ -106,11 +112,11 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         cancellablse.removeAll()
     }
     
-    func checkPermssion() async{
+    func checkPhotoPermssion() async{
         await permission.checkPhotoPermission()
     }
         
-    func showPermissionState() async{
+    func showPhotoPermissionState() async{
         switch permission.photoStatus() {
         case .notDetermined:  fatalError()
         case .restricted: await MainActor.run { presenter.showPermissionDenied() }
@@ -155,6 +161,10 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         self.album = album
     }
     
+    func closeButtonDidTap() {
+        listener?.galleryDidCancel()
+    }
+    
     func doneButtonDidTap() {
         listener?.galleryDidFinish(selection.photos())
     }
@@ -180,6 +190,38 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         selection.toogle(photo)
         presenter.showSelectionCount(selection.count)
     }
+        
+    func cameraDidTap() {
+        Task{
+            await checkCameraPermission()
+            await showCameraPermissionState()
+        }
+    }
+    
+    func cameraDidCapture(_ capture: Capture) {
+        router?.attachPhtoEditor([capture])
+        router?.detachCamera()                
+    }
+    
+    func cameraDidCancel() {
+        router?.detachCamera()
+    }
+    
+    
+    func checkCameraPermission() async{
+        await permission.checkCameraPermission()
+    }
+    
+    @MainActor
+    func showCameraPermissionState(){
+        switch permission.cameraStatus() {
+        case .notDetermined: fatalError()
+        case .restricted: presenter.showCameraPermissionDenied()
+        case .denied: presenter.showCameraPermissionDenied()
+        case .authorized: router?.attachCamera()
+        }
+    }
+    
 }
 
 

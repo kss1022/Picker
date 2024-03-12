@@ -20,6 +20,7 @@ final class GalleryRouterTests: XCTestCase {
     private var viewController: GalleryViewControllableMock!
     private var albumBuildable: AlbumsBuildableMock!
     private var photoBuildable: PhotoEditorBuildableMock!
+    private var cameraBuildable: CameraBuildableMock!
     
 
     override func setUp() {
@@ -29,12 +30,14 @@ final class GalleryRouterTests: XCTestCase {
         self.viewController = GalleryViewControllableMock()
         self.albumBuildable = AlbumsBuildableMock()
         self.photoBuildable = PhotoEditorBuildableMock()
+        self.cameraBuildable = CameraBuildableMock()
 
         self.sut = GalleryRouter(
             interactor: interactor,
             viewController: viewController,
             albumsBuildable: albumBuildable, 
-            photoEditorBuildable: photoBuildable
+            photoEditorBuildable: photoBuildable,
+            cameraBuildable: cameraBuildable
         )
     }
 
@@ -62,4 +65,5 @@ final class GalleryRouterTests: XCTestCase {
         XCTAssertTrue(albumListener === interactor)
 
     }
+
 }

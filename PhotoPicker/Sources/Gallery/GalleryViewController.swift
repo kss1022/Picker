@@ -12,10 +12,12 @@ import AlbumEntity
 
 protocol GalleryPresentableListener: AnyObject {    
     func titleViewDidTap()
+    func closeButtonDidTap()
     func doneButtonDidTap()
     func editButtonDidTap()
-    func permissionButtonDidTap()
+    func permissionButtonDidTap()    
     func photoDidtap(_ photo: Photo)
+    func cameraDidTap()
 }
 
 final class GalleryViewController: UIViewController, GalleryPresentable, GalleryViewControllable {
@@ -28,6 +30,15 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         button.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .bold)
         button.addTarget(self, action: #selector(titleViewTap), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var closeBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closeBarButtonItemTap)
+        )
+        return barButtonItem
     }()
     
     private lazy var doneBarButtonItem: DoneBarButtonItem = {
@@ -46,7 +57,17 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
             image: UIImage(systemName: "wand.and.rays"),
             style: .plain,
             target: self,
-            action: #selector(photoEditBarButtonTap)
+            action: #selector(photoEditBarButtonItemTap)
+        )
+        barButtonItem.tintColor = .label
+        return barButtonItem
+    }()
+    
+    private lazy var cameraBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .camera,
+            target: self,
+            action: #selector(cameraBarButtonItemTap)
         )
         barButtonItem.tintColor = .label
         return barButtonItem
@@ -102,9 +123,10 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     private func setLayout(){                
         view.backgroundColor = .systemBackground
         
+        navigationItem.leftBarButtonItem = closeBarButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBarButtonItem)
         
-        toolbarItems =  [photoEditBarButtonItem]
+        toolbarItems =  [photoEditBarButtonItem, cameraBarButtonItem]
         
 
         view.addSubview(stackView)
@@ -119,7 +141,7 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             permissionDeniedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             permissionDeniedButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -128,14 +150,7 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
      
     }
     
-    override func didMove(toParent parent: UIViewController?) {
-        super.didMove(toParent: parent)
-        
-        if parent is UINavigationController{
-            navigationController?.isToolbarHidden = false
-        }
-    }
-    
+
     //MARK: ViewControllerable
     func showAlbums(_ view: ViewControllable) {
         let vc = view.uiviewController
@@ -176,6 +191,34 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     func showPermissionLimited() {
         permissionLimitedButton.isHidden = false
     }
+    
+    func showCameraPermissionDenied() {
+        let alert = UIAlertController(
+            title: "카메라에 대한 엑세스 권한이 없어요.",
+            message: "설정 앱에서 권한을 수정할 수 있어요.",
+            preferredStyle: .alert
+        )
+        
+        let settingAction = UIAlertAction(
+            title: "지금 설정하기",
+            style: .default) { [weak self] _ in
+                self?.listener?.permissionButtonDidTap()
+            }
+        
+        let cancelAction = UIAlertAction(
+            title: "취소",
+            style: .cancel) { _ in
+                alert.dismiss(animated: true)
+            }
+        
+        [settingAction, cancelAction].forEach {
+            alert.addAction($0)
+        }
+        
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
 
     func openSetting() {
         URLSchemeManager.shared.openSetting()
@@ -209,13 +252,23 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     }
     
     @objc
+    private func closeBarButtonItemTap(){
+        listener?.closeButtonDidTap()
+    }
+    
+    @objc
     private func doneBarButtonItemTap(){
         listener?.doneButtonDidTap()
     }
     
     @objc
-    private func photoEditBarButtonTap(){
+    private func photoEditBarButtonItemTap(){
         listener?.editButtonDidTap()
+    }
+    
+    @objc
+    private func cameraBarButtonItemTap(){
+        listener?.cameraDidTap()
     }
     
     @objc

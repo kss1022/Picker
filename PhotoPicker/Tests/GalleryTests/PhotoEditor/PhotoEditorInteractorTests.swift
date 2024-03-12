@@ -50,7 +50,7 @@ final class PhotoEditorInteractorTests: XCTestCase {
         sut.didBecomeActive()
         
         XCTAssertEqual(1, presentable.showPhotosCallCount)
-        XCTAssertEqual(dependency.photos.count-1, presentable.showPhotosPage)
+        XCTAssertEqual(dependency.images.count-1, presentable.showPhotosPage)
     }
     
     func testSetIndex(){

@@ -58,4 +58,8 @@ extension ViewController: PickerViewControllerDelegate{
         
         
     }
+    
+    func pickerDidCancel(_ picker: PhotoPicker.PickerViewController) {
+        picker.dismiss(animated: true)
+    }
 }

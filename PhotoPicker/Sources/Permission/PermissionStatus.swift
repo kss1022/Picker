@@ -36,3 +36,32 @@ internal struct PhotoPermission{
         }
     }
 }
+
+
+public enum CameraStatus: Int{
+    case notDetermined
+    case restricted
+    case denied
+    case authorized
+}
+
+
+internal struct CameraPermission{
+        
+    private let captureDevice: CaptureDevice?
+    
+    init(_ captureDevice: CaptureDevice? = AVCaptureDevice.default(for: .video)){
+        self.captureDevice = captureDevice
+    }
+    
+    func status() -> CameraStatus {
+        switch captureDevice?.authorizationStatus(for: .video) ?? .restricted{
+        case .notDetermined: return .notDetermined
+        case .restricted: return .restricted
+        case .denied: return .denied
+        case .authorized: return .authorized
+        @unknown default: fatalError("PHAuthorizationStatus not handled")
+        }
+    }
+}
+

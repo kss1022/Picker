@@ -10,8 +10,9 @@ import RIBsUtils
 import Albums
 import AlbumEntity
 import PhotoEditor
+import Camera
 
-protocol GalleryInteractable: Interactable, AlbumsListener, PhotoEditorListener {
+protocol GalleryInteractable: Interactable, AlbumsListener, PhotoEditorListener, CameraListener {
     var router: GalleryRouting? { get set }
     var listener: GalleryListener? { get set }
 }
@@ -29,14 +30,19 @@ final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewContro
     private let photoEditorBuildable: PhotoEditorBuildable
     private var photoEditorRouter: ViewableRouting?
     
+    private let cameraBuildable: CameraBuildable
+    private var cameraRouter : ViewableRouting?
+    
     init(
         interactor: GalleryInteractable,
         viewController: GalleryViewControllable,
         albumsBuildable: AlbumsBuildable,
-        photoEditorBuildable: PhotoEditorBuildable
+        photoEditorBuildable: PhotoEditorBuildable,
+        cameraBuildable: CameraBuildable
     ) {
         self.albumsBuildable = albumsBuildable
         self.photoEditorBuildable = photoEditorBuildable
+        self.cameraBuildable = cameraBuildable
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
     }
@@ -63,12 +69,12 @@ final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewContro
         albumRouter = nil
     }
     
-    func attachPhtoEditor(_ photos: [Photo]) {
+    func attachPhtoEditor(_ images: [Image]) {
         if photoEditorRouter != nil{
             return
         }
         
-        let router = photoEditorBuildable.build(withListener: interactor, photos: photos)
+        let router = photoEditorBuildable.build(withListener: interactor, images: images)
         viewController.pushViewController(router.viewControllable, animated: true)
         photoEditorRouter = router
         attachChild(router)
@@ -82,6 +88,29 @@ final class GalleryRouter: ViewableRouter<GalleryInteractable, GalleryViewContro
         viewController.popViewController(animated: true)
         detachChild(router)
         photoEditorRouter = nil
+    }
+    
+    
+    func attachCamera() {
+        if cameraRouter != nil{
+            return
+        }
+        
+        let router = cameraBuildable.build(withListener: interactor)
+        viewController.present(router.viewControllable, animated: true, completion: nil)
+        
+        cameraRouter = router
+        attachChild(router)
+    }
+    
+    func detachCamera() {
+        guard let router = cameraRouter else {
+            return
+        }
+                
+        viewController.dismiss(completion: nil)
+        detachChild(router)
+        cameraRouter = nil
     }
     
     

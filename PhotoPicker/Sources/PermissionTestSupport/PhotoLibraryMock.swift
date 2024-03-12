@@ -10,7 +10,7 @@ import Photos
 import Permission
 
 
-public class PhotoLibraryMock: PhotoLibrary {
+public final class PhotoLibraryMock: PhotoLibrary {
     
     
     public var authorizationStatus: PHAuthorizationStatus

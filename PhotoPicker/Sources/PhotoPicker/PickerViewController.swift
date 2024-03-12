@@ -15,6 +15,8 @@ protocol PickerHandler{
 
 public protocol PickerViewControllerDelegate: AnyObject{
     func picker(_ picker: PickerViewController, didFinishPicking results: [PickerResult])
+    func pickerDidCancel(_ picker: PickerViewController)
+
 }
 
 public final class PickerViewController: UIViewController{
@@ -64,5 +66,9 @@ public final class PickerViewController: UIViewController{
 extension PickerViewController: PickerRootListener{
     func pickerDidFinish(_ images: [Image]) {
         delegate?.picker(self, didFinishPicking: images.map(PickerResult.init))
+    }
+    
+    func pickerDidCancel() {
+        delegate?.pickerDidCancel(self)
     }
 }

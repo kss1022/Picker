@@ -13,13 +13,13 @@ public protocol PhotoEditorDependency: Dependency {
 
 final class PhotoEditorComponent: Component<PhotoEditorDependency>, PhotoEditorInteractorDependency, PhotoCropDependency {
     
-    let photos: [Photo]
+    let images: [Image]
     
     init(
         dependency: PhotoEditorDependency,
-        photos: [Photo]
+        images: [Image]
     ) {
-        self.photos = photos
+        self.images = images
         super.init(dependency: dependency)
     }
 }
@@ -27,7 +27,7 @@ final class PhotoEditorComponent: Component<PhotoEditorDependency>, PhotoEditorI
 // MARK: - Builder
 
 public protocol PhotoEditorBuildable: Buildable {
-    func build(withListener listener: PhotoEditorListener, photos: [Photo]) -> ViewableRouting
+    func build(withListener listener: PhotoEditorListener, images: [Image]) -> ViewableRouting
 }
 
 public final class PhotoEditorBuilder: Builder<PhotoEditorDependency>, PhotoEditorBuildable {
@@ -36,8 +36,8 @@ public final class PhotoEditorBuilder: Builder<PhotoEditorDependency>, PhotoEdit
         super.init(dependency: dependency)
     }
 
-    public func build(withListener listener: PhotoEditorListener, photos: [Photo]) -> ViewableRouting {
-        let component = PhotoEditorComponent(dependency: dependency, photos: photos)
+    public func build(withListener listener: PhotoEditorListener, images: [Image]) -> ViewableRouting {
+        let component = PhotoEditorComponent(dependency: dependency, images: images)
         let viewController = PhotoEditorViewController()
         let interactor = PhotoEditorInteractor(presenter: viewController, dependency: component)
         interactor.listener = listener

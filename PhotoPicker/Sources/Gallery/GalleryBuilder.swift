@@ -12,6 +12,7 @@ import Selection
 import AlbumRepository
 import Albums
 import PhotoEditor
+import Camera
 import CombineSchedulers
 
 public protocol GalleryDependency: Dependency {
@@ -21,7 +22,7 @@ public protocol GalleryDependency: Dependency {
     var mainQueue: AnySchedulerOf<DispatchQueue>{ get }
 }
 
-final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency , AlbumsDependency, PhotoEditorDependency{
+final class GalleryComponent: Component<GalleryDependency>, GalleryInteractorDependency , AlbumsDependency, PhotoEditorDependency, CameraDependency{
     var permission: Permission{ dependency.permission }
     var selection: Selection{ dependency.selection }
     var albumRepository: AlbumRepository{ dependency.albumRepository }
@@ -48,12 +49,14 @@ public final class GalleryBuilder: Builder<GalleryDependency>, GalleryBuildable 
         
         let albumsBuilder = AlbumsBuilder(dependency: component)
         let photoEditorBuilder = PhotoEditorBuilder(dependency: component)
+        let cameraBuilder = CameraBuilder(dependency: component)
         
         return GalleryRouter(
             interactor: interactor,
             viewController: viewController,
             albumsBuildable: albumsBuilder, 
-            photoEditorBuildable: photoEditorBuilder
+            photoEditorBuildable: photoEditorBuilder,
+            cameraBuildable: cameraBuilder
         )
     }
 }

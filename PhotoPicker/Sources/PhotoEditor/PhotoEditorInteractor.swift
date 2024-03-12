@@ -35,7 +35,7 @@ public protocol PhotoEditorListener: AnyObject {
 }
 
 protocol PhotoEditorInteractorDependency{
-    var photos: [Photo]{ get }
+    var images: [Image]{ get }
 }
 
 final class PhotoEditorInteractor: PresentableInteractor<PhotoEditorPresentable>, PhotoEditorInteractable, PhotoEditorPresentableListener {
@@ -55,8 +55,8 @@ final class PhotoEditorInteractor: PresentableInteractor<PhotoEditorPresentable>
     ) {
         self.dependency = dependency
         self.screenMode = .normal
-        self.images = dependency.photos
-        self.page = dependency.photos.count-1
+        self.images = dependency.images
+        self.page = dependency.images.count-1
         super.init(presenter: presenter)
         presenter.listener = self
     }

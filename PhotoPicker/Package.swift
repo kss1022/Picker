@@ -23,6 +23,10 @@ let package = Package(
             targets: ["Albums"]
         ),
         .library(
+            name: "Camera",
+            targets: ["Camera"]
+        ),
+        .library(
             name: "Permission",
             targets: ["Permission"]
         ),
@@ -76,7 +80,8 @@ let package = Package(
                 "Selection",
                 "AlbumRepository",
                 "Albums",
-                "PhotoEditor"
+                "PhotoEditor",
+                "Camera"
             ]
         ),
         .target(
@@ -92,6 +97,12 @@ let package = Package(
                 "ModernRIBs",
                 "GalleryUtils",
                 "AlbumRepository",
+            ]
+        ),
+        .target(
+            name: "Camera",
+            dependencies: [
+                "AlbumEntity"
             ]
         ),
         .target(

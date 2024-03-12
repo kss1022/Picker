@@ -19,10 +19,17 @@ final class PickerRootViewController: UINavigationController, PickerRootPresenta
     
     init(){
         super.init(nibName: nil, bundle: nil)
+        setNavigation()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        
+        setNavigation()
+    }
+    
+    private func setNavigation(){
+        isToolbarHidden = false
     }
     
     func setGallery(_ view: ViewControllable) {

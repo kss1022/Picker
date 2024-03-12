@@ -42,39 +42,39 @@ final class GalleryInteractorTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testCheckPermissionCall() async{
-        await sut.checkPermssion()
+    func testCheckPhotoPermissionCall() async{
+        await sut.checkPhotoPermssion()
         
         XCTAssertEqual(1, permission.checkPhotoPermissionCallCount)
     }
     
-    func testShowPermissionDenied() async{
-        await sut.checkPermssion()
+    func testShowPhotoPermissionDenied() async{
+        await sut.checkPhotoPermssion()
         permission.photoStatusMock = .denied
-        await sut.showPermissionState()
+        await sut.showPhotoPermissionState()
                 
         XCTAssertEqual(1, presentable.showPermissionDeniedCallCount)
         XCTAssertEqual(false, presentable.permissionDeniedIsHidden)
         XCTAssertEqual(true, presentable.permissionLimitedIsHidden)
     }
     
-    func testShowPermissionLimited() async{                
-        await sut.checkPermssion()
+    func testShowPhotoPermissionLimited() async{                
+        await sut.checkPhotoPermssion()
         permission.photoStatusMock = .limited
-        await sut.showPermissionState()
+        await sut.showPhotoPermissionState()
         
         XCTAssertEqual(true, presentable.permissionDeniedIsHidden)
         XCTAssertEqual(false, presentable.permissionLimitedIsHidden)
     }
             
     func testShowPhotos() async{
-        await sut.checkPermssion()
+        await sut.checkPhotoPermssion()
         permission.photoStatusMock = .authorized
         
         let album = Album()
         albumRepository.albumsSubject.send([album])
         
-        await sut.showPermissionState()
+        await sut.showPhotoPermissionState()
                 
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)
@@ -85,13 +85,13 @@ final class GalleryInteractorTests: XCTestCase {
     }
     
     func testShowLimitedPhotos() async{
-        await sut.checkPermssion()
+        await sut.checkPhotoPermssion()
         permission.photoStatusMock = .limited
         
         let album = Album()
         albumRepository.albumsSubject.send([album])
         
-        await sut.showPermissionState()
+        await sut.showPhotoPermissionState()
                 
         XCTAssertEqual([album], albumRepository.albums.value)
         XCTAssertEqual(1, albumRepository.fetchCallCount)
@@ -180,6 +180,21 @@ final class GalleryInteractorTests: XCTestCase {
                 
         XCTAssertEqual(3, presentable.showPhotoGridCallCount)
         XCTAssertEqual(3, presentable.showAlbumNameCallCount)
+    }
+        
+    
+    func testCheckCameraPermissionCall() async{
+        await sut.checkCameraPermission()
+        
+        XCTAssertEqual(1, permission.checkCameraPermissionCallCount)
+    }
+    
+    func testShowCameraPermissionDenied() async{
+        await sut.checkPhotoPermssion()
+        permission.cameraStatusMock = .denied
+        await sut.showCameraPermissionState()
+                    
+        XCTAssertEqual(1, presentable.showCamerPermissionDeniedCallCount)
     }
         
 }

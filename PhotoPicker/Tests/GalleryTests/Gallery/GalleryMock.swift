@@ -55,6 +55,11 @@ final class GalleryPresentableMock: GalleryPresentable{
         permissionLimitedIsHidden = false
     }
     
+    var showCamerPermissionDeniedCallCount = 0
+    func showCameraPermissionDenied() {
+        showCamerPermissionDeniedCallCount += 1
+    }
+    
     var openSettingCallCount = 0
     func openSetting() {
         openSettingCallCount += 1
@@ -101,6 +106,8 @@ final class GalleryPresentableMock: GalleryPresentable{
 
 
 final class GalleryInteractorMock: GalleryInteractable{
+
+    
     var router: GalleryRouting?
     
     var listener: GalleryListener?
@@ -131,6 +138,16 @@ final class GalleryInteractorMock: GalleryInteractable{
     var photoEditorDidMoveCallCount = 0
     func photoEditorDidMove() {
         photoEditorDidMoveCallCount += 1
+    }
+    
+    var cameraDidCaptureCallCount = 0
+    func cameraDidCapture(_ capture: Capture) {
+        cameraDidCaptureCallCount += 1
+    }
+    
+    var camerDidCancelCallCount = 0
+    func cameraDidCancel() {
+        camerDidCancelCallCount += 1
     }
     
     

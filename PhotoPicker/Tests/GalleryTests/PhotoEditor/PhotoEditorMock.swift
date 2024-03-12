@@ -11,10 +11,10 @@ import ModernRIBs
 
 
 final class PhotoEditorDependencyMock: PhotoEditorInteractorDependency{
-    var photos: [Photo]
+    var images: [Image]
     
     init() {
-        self.photos = [Photo(),Photo(),Photo(),Photo(),Photo()]
+        self.images = [PhotoMock("Lenna")]
     }
     
 }
@@ -74,8 +74,10 @@ final class PhotoEditorBuildableMock: PhotoEditorBuildable{
         
     
     var buildCallCount = 0
-    func build(withListener listener:  PhotoEditorListener, photos: [Photo]) ->  ViewableRouting {
+    var buildImages: [Image]?
+    func build(withListener listener:  PhotoEditorListener, images: [Image]) ->  ViewableRouting {
         buildCallCount += 1
+        buildImages = images
         
         if let buildHandler = buildHandler{
             return buildHandler(listener)

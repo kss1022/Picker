@@ -6,13 +6,17 @@ final class PermissionTests: XCTestCase {
     
     private var sut: PermissionImp!
     private var library: PhotoLibraryMock!
+    private var captureDevice: CaptureDeviceMock!
     
     override func setUp() {
         super.setUp()
         
         library = PhotoLibraryMock()
-        sut = PermissionImp(library)
+        captureDevice = CaptureDeviceMock()
+        sut = PermissionImp(library, captureDevice)
     }
+    
+    //MARK: Photo permission tests
 
     func testCheckPhotoPermissionNotDetermied() async{
         library.authorizationStatus = .notDetermined
@@ -41,6 +45,35 @@ final class PermissionTests: XCTestCase {
         XCTAssertEqual(PhotoStatus.authorized, sut.photoStatus())
     }
     
+    
+    //MARK: Capture permission tests
+    
+    func testCheckCameraPermissionNotDetermied() async{
+        captureDevice.authorizationStatus = .notDetermined
+        await sut.checkCameraPermission()
+        captureDevice.didTapDenied()
+        XCTAssertNotEqual(CameraStatus.notDetermined, sut.cameraStatus())
+    }
+        
+    func testCheckCameraPermssionDenied() async{
+        captureDevice.authorizationStatus = .denied
+        await sut.checkCameraPermission()
+        XCTAssertEqual(CameraStatus.denied, sut.cameraStatus())
+    }
+    
+    func testCheckCameraPermssionAuthorized() async{
+        captureDevice.authorizationStatus = .authorized
+        await sut.checkCameraPermission()
+        XCTAssertEqual(CameraStatus.authorized, sut.cameraStatus())
+    }
+    
+    
+    func testSetCameraPermissionAuthorized() async{
+        captureDevice.authorizationStatus = .notDetermined
+        await sut.checkCameraPermission()
+        captureDevice.didTapAuthorized()
+        XCTAssertEqual(CameraStatus.authorized, sut.cameraStatus())
+    }
     
     
     

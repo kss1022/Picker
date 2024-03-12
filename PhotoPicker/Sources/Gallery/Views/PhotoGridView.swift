@@ -21,6 +21,9 @@ final class PhotoGridView: UIView{
     
     private var viewModel: PhotoGridViewModel?
     weak var delegate: PhotoGridViewDelegate?
+    
+    private let imageManager: PHAssetCacheManager = PHAssetCacheManager.shared()
+    
             
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -31,7 +34,7 @@ final class PhotoGridView: UIView{
         collectionView.prefetchDataSource = self
         
         collectionView.collectionViewLayout = getCollectionViewLayout()
-        collectionView.register(cellType: PhotoCell.self)
+        collectionView.register(cellType: PhotoGridCell.self)
                 
         collectionView.allowsSelection = true
         collectionView.allowsMultipleSelection = true
@@ -48,7 +51,11 @@ final class PhotoGridView: UIView{
         setView()
     }
     
-    required init?(coder: NSCoder) {        
+    deinit{
+        imageManager.stopCachingImagesForAllAssets()
+    }
+    
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         setView()
@@ -138,7 +145,7 @@ extension PhotoGridView: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: PhotoCell.self)
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: PhotoGridCell.self)                
         let viewModel = PhotoGridCellViewModel(
             photo: viewModel!.photo(indexPath.row),
             isSelect: viewModel!.isSelect(indexPath.row),
@@ -165,7 +172,7 @@ extension PhotoGridView: UICollectionViewDataSourcePrefetching{
         let assets = indexPaths
             .compactMap { viewModel!.photo($0.row) }
             .map { $0.asset }
-        PHAssetCacheManager.shared().startCachingImages(for: assets)
+        imageManager.startCachingImages(for: assets)
     }
     
     
@@ -173,6 +180,6 @@ extension PhotoGridView: UICollectionViewDataSourcePrefetching{
         let assets = indexPaths
             .compactMap { viewModel!.photo($0.row) }
             .map { $0.asset }
-        PHAssetCacheManager.shared().stopCachingImages(for: assets)
+        imageManager.stopCachingImages(for: assets)
     }
 }

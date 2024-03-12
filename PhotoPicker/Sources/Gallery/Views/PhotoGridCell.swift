@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PhotoGridCell.swift
 //  
 //
 //  Created by 한현규 on 3/3/24.
@@ -12,7 +12,7 @@ import AlbumEntity
 import Selection
 
 
-final class PhotoCell: UICollectionViewCell{
+final class PhotoGridCell: UICollectionViewCell{
                 
     private let imageView: UIImageView = {
        let imageView = UIImageView()
