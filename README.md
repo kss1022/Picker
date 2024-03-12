@@ -79,7 +79,11 @@ public struct PickerResult {
 - Use the `camera` to capture and save images. 📸
 - Modify selected image through the `PhotoEditor`  
 
+<img src="https://github.com/kss1022/Picker/assets/70006717/6a3ad3ff-098e-43a9-8a6f-00513bc2cd93" width="200" height="400"/><img src="https://github.com/kss1022/Picker/assets/70006717/c6a8ccac-7302-4edc-b524-72707e54afa2" width="200" height="400"/><img src="https://github.com/kss1022/Picker/assets/70006717/02d5077d-805b-48d6-8855-a183b9855346" width="200" height="400"/>
 
 #### PhotoEditor
 - `Crop` the image in `Freestyle`, `1:1`, `4:3`, `3:4` ratio 
 - `Rotate` the image. 🔁
+
+
+<img src="https://github.com/kss1022/Picker/assets/70006717/93ad9a32-cd7b-4c28-94ed-9ba7d8d7f892" width="200" height="400"/><img src="https://github.com/kss1022/Picker/assets/70006717/44e4b9ef-fbac-4c4c-9ab7-8fd03a779577" width="200" height="400"/><img src="https://github.com/kss1022/Picker/assets/70006717/c2b5b54c-f2a9-4a01-9b8c-2eb567cd7ab8" width="200" height="400"/>
