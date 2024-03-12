@@ -101,6 +101,19 @@ final class GalleryPresentableMock: GalleryPresentable{
         limitedAlbumChangedChange = change
     }
     
+    var isLoading = false
+    var startLoadingCallCount = 0
+    func startLoading() {
+        startLoadingCallCount += 1
+        isLoading = true
+    }
+    
+    var stopLoadingCallCount = 0
+    func stopLoading() {
+        stopLoadingCallCount += 1
+        isLoading = false
+    }
+    
 }
 
 

@@ -108,6 +108,14 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         return view
     }()
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView(style: .large)
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        activity.hidesWhenStopped = true
+        activity.stopAnimating()
+        return activity
+    }()
+    
     init(){
         super.init(nibName: nil, bundle: nil)
         
@@ -128,9 +136,10 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         
         toolbarItems =  [photoEditBarButtonItem, cameraBarButtonItem]
         
-
+        
         view.addSubview(stackView)
         view.addSubview(permissionDeniedButton)
+        view.addSubview(activityIndicator)
         
         
         stackView.addArrangedSubview(permissionLimitedButton)
@@ -145,6 +154,9 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
             
             permissionDeniedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             permissionDeniedButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),            
         ])
         
      
@@ -244,6 +256,14 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
     
     func showSelectionCount(_ count: Int) {
         doneBarButtonItem.count(count)
+    }
+    
+    func startLoading() {
+        activityIndicator.startAnimating()
+    }
+    
+    func stopLoading() {
+        activityIndicator.stopAnimating()
     }
     
     @objc

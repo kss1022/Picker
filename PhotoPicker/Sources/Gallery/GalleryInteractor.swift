@@ -35,8 +35,7 @@ protocol GalleryPresentable: Presentable {
     func openSetting()
     
     func showCameraPermissionDenied()
-        
-    //TODO: ShowAlbumName
+            
     func showPhotoGrid(_ viewModel: PhotoGridViewModel)
     func showAlbumName(_ albumName: String?)
     
@@ -44,6 +43,9 @@ protocol GalleryPresentable: Presentable {
     func limitedAlbumChanged(_ change: AlbumChange)
     
     func showSelectionCount(_ count: Int)
+    
+    func startLoading()
+    func stopLoading()
 }
 
 public protocol GalleryListener: AnyObject {
@@ -92,6 +94,8 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     override func didBecomeActive() {
         super.didBecomeActive()
         
+        presenter.startLoading()
+        
         Task{
             await checkPhotoPermssion()
             await showPhotoPermissionState()
@@ -119,24 +123,35 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     func showPhotoPermissionState() async{
         switch permission.photoStatus() {
         case .notDetermined:  fatalError()
-        case .restricted: await MainActor.run { presenter.showPermissionDenied() }
-        case .denied: await MainActor.run { presenter.showPermissionDenied() }
+        case .restricted: await MainActor.run { 
+            presenter.showPermissionDenied()
+            presenter.stopLoading()
+        }
+        case .denied:
+            await MainActor.run { 
+                presenter.showPermissionDenied()
+                presenter.stopLoading()
+            }
         case .authorized:
             await albumRepository.fetch()
-            guard let album = albumRepository.albums.value.first else { return }
-            await MainActor.run { 
-                presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
-                presenter.showAlbumName(album.name())
+            await MainActor.run {
+                if let album = albumRepository.albums.value.first{
+                    presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+                    presenter.showAlbumName(album.name())
+                    self.album = album
+                }
+                self.presenter.stopLoading()
             }
-            self.album = album
         case .limited:
             await albumRepository.fetch()
             await MainActor.run {
                 presenter.showPermissionLimited()
-                guard let album = albumRepository.albums.value.first else { return }
-                presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
-                presenter.showAlbumName(album.name())
-                self.album = album
+                if let album = albumRepository.albums.value.first{
+                    presenter.showPhotoGrid(PhotoGridViewModel(album, selection))
+                    presenter.showAlbumName(album.name())
+                    self.album = album
+                }
+                self.presenter.stopLoading()
             }
         }
     }

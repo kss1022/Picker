@@ -196,5 +196,28 @@ final class GalleryInteractorTests: XCTestCase {
                     
         XCTAssertEqual(1, presentable.showCamerPermissionDeniedCallCount)
     }
+    
+    
+    func testLoadingPhotosAuthorized(){
+        permission.photoStatusMock = .authorized
+                        
+        sut.didBecomeActive()
+        _ = XCTWaiter.wait(for: [XCTestExpectation(description: "didBecomeActive")], timeout: 0.1)
+        
+        XCTAssertEqual(1, presentable.startLoadingCallCount)
+        XCTAssertEqual(1, presentable.stopLoadingCallCount)
+        XCTAssertEqual(false, presentable.isLoading)
+    }
+    
+    func testLoadingPhotosDenied(){
+        permission.photoStatusMock = .denied
+                        
+        sut.didBecomeActive()
+        _ = XCTWaiter.wait(for: [XCTestExpectation(description: "didBecomeActive")], timeout: 0.1)
+        
+        XCTAssertEqual(1, presentable.startLoadingCallCount)
+        XCTAssertEqual(1, presentable.stopLoadingCallCount)
+        XCTAssertEqual(false, presentable.isLoading)
+    }            
         
 }
