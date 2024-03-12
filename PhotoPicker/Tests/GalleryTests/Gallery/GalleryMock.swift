@@ -101,7 +101,7 @@ final class GalleryPresentableMock: GalleryPresentable{
         limitedAlbumChangedChange = change
     }
     
-    var isLoading = false
+    var isLoading: Bool?
     var startLoadingCallCount = 0
     func startLoading() {
         startLoadingCallCount += 1
@@ -114,6 +114,31 @@ final class GalleryPresentableMock: GalleryPresentable{
         isLoading = false
     }
     
+    var doneButtonIsEnable: Bool?
+    var doneButtonEnableCallCount = 0
+    func doneButtonEnable() {
+        doneButtonEnableCallCount += 1
+        doneButtonIsEnable = true
+    }
+    
+    var doneButtonDisableCallCount = 0
+    func doneButtonDisable() {
+        doneButtonDisableCallCount += 1
+        doneButtonIsEnable = false
+    }
+    
+    var photoEditButtonIsEnable: Bool?
+    var photoEditButtonEanbleCallCount = 0
+    func photoEditButtonEnable() {
+        photoEditButtonEanbleCallCount += 1
+        photoEditButtonIsEnable = true
+    }
+    
+    var photoEditButtonDisableCallCount = 0
+    func photoEditButtonDisable() {
+        photoEditButtonDisableCallCount += 1
+        photoEditButtonIsEnable = false
+    }
 }
 
 

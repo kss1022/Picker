@@ -46,6 +46,12 @@ protocol GalleryPresentable: Presentable {
     
     func startLoading()
     func stopLoading()
+    
+    func doneButtonEnable()
+    func doneButtonDisable()
+    
+    func photoEditButtonEnable()
+    func photoEditButtonDisable()
 }
 
 public protocol GalleryListener: AnyObject {
@@ -95,6 +101,9 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
         super.didBecomeActive()
         
         presenter.startLoading()
+        presenter.doneButtonDisable()
+        presenter.photoEditButtonDisable()
+        
         
         Task{
             await checkPhotoPermssion()
@@ -204,6 +213,14 @@ final class GalleryInteractor: PresentableInteractor<GalleryPresentable>, Galler
     func photoDidtap(_ photo: Photo) {
         selection.toogle(photo)
         presenter.showSelectionCount(selection.count)
+        
+        if selection.isEmpty{
+            presenter.doneButtonDisable()
+            presenter.photoEditButtonDisable()
+        }else{
+            presenter.doneButtonEnable()
+            presenter.photoEditButtonEnable()
+        }
     }
         
     func cameraDidTap() {

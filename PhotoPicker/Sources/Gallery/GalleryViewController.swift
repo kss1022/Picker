@@ -266,6 +266,22 @@ final class GalleryViewController: UIViewController, GalleryPresentable, Gallery
         activityIndicator.stopAnimating()
     }
     
+    func doneButtonEnable() {
+        doneBarButtonItem.isEnabled = true
+    }
+    
+    func doneButtonDisable() {
+        doneBarButtonItem.isEnabled = false
+    }
+    
+    func photoEditButtonEnable() {
+        photoEditBarButtonItem.isEnabled = true
+    }
+    
+    func photoEditButtonDisable() {
+        photoEditBarButtonItem.isEnabled = false
+    }
+    
     @objc
     private func titleViewTap(){
         listener?.titleViewDidTap()

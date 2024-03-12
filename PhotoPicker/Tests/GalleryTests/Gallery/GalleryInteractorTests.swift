@@ -219,5 +219,38 @@ final class GalleryInteractorTests: XCTestCase {
         XCTAssertEqual(1, presentable.stopLoadingCallCount)
         XCTAssertEqual(false, presentable.isLoading)
     }            
+    
+    
+    func testButtonsInitalized(){
+        permission.photoStatusMock = .authorized
+        
+        sut.didBecomeActive()
+        
+        XCTAssertEqual(1, presentable.doneButtonDisableCallCount)
+        XCTAssertEqual(false, presentable.doneButtonIsEnable)
+        XCTAssertEqual(1, presentable.photoEditButtonDisableCallCount)
+        XCTAssertEqual(false, presentable.doneButtonIsEnable)
+    }
+    
+    func testButtonsEnable(){
+        sut.photoDidtap(Photo())
+        
+        XCTAssertEqual(1, presentable.doneButtonEnableCallCount)
+        XCTAssertEqual(true, presentable.doneButtonIsEnable)
+        XCTAssertEqual(1, presentable.photoEditButtonEanbleCallCount)
+        XCTAssertEqual(true, presentable.doneButtonIsEnable)
+    }
+    
+    func testButtonsDisable(){
+        let photo = Photo()
+        sut.photoDidtap(photo)
+        sut.photoDidtap(photo)
+        
+        XCTAssertEqual(1, presentable.doneButtonDisableCallCount)
+        XCTAssertEqual(1, presentable.photoEditButtonDisableCallCount)
+        
+        XCTAssertEqual(false, presentable.doneButtonIsEnable)
+        XCTAssertEqual(false, presentable.photoEditButtonIsEnable)
+    }
         
 }
